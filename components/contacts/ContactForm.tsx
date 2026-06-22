@@ -49,8 +49,9 @@ export default function ContactForm({ contact }: ContactFormProps) {
         const created = await createContact(form)
         router.push(`/contacts/${created.id}`)
       }
-    } catch {
-      setError('Errore nel salvataggio. Riprova.')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : JSON.stringify(err)
+      setError(`Errore: ${msg}`)
       setSaving(false)
     }
   }
