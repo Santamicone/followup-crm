@@ -25,6 +25,7 @@ begin
 end;
 $$ language plpgsql;
 
+drop trigger if exists contacts_updated_at on contacts;
 create trigger contacts_updated_at
   before update on contacts
   for each row execute function update_updated_at();
@@ -32,13 +33,14 @@ create trigger contacts_updated_at
 -- Row Level Security
 alter table contacts enable row level security;
 
--- Policy: accesso completo per utenti autenticati (adattare per multi-tenant)
-create policy "Authenticated users can manage contacts"
+-- Policy: accesso anon e authenticated (MVP senza login)
+drop policy if exists "Authenticated users can manage contacts" on contacts;
+create policy "Allow all access"
   on contacts for all
-  to authenticated
+  to anon, authenticated
   using (true)
   with check (true);
 
 -- Indici utili
-create index contacts_status_idx on contacts (status);
-create index contacts_next_action_date_idx on contacts (next_action_date);
+create index if not exists contacts_status_idx on contacts (status);
+create index if not exists contacts_next_action_date_idx on contacts (next_action_date);
