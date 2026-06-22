@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FollowUp CRM
 
-## Getting Started
+Mini CRM per professionisti e piccoli imprenditori. Gestisci contatti, opportunità commerciali e prossime azioni.
 
-First, run the development server:
+## Stack
+
+- **Next.js 15** (App Router)
+- **TypeScript**
+- **Tailwind CSS 4**
+- **Supabase** (fase 2)
+
+## Avvio rapido
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Apri [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Struttura
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/
+  page.tsx                  # Dashboard
+  contacts/
+    page.tsx                # Lista contatti
+    new/page.tsx            # Nuovo contatto
+    [id]/page.tsx           # Dettaglio contatto
+    [id]/edit/page.tsx      # Modifica contatto
+components/
+  layout/                   # Sidebar, Header
+  dashboard/                # StatCard, FollowUpList
+  contacts/                 # ContactCard, ContactForm, ContactFilters
+  ui/                       # Badge, Button, Modal
+lib/
+  types.ts                  # Tipi TypeScript
+  mock-data.ts              # Store in-memory (fase 1)
+  supabase.ts               # Client Supabase (fase 2, commentato)
+```
 
-## Learn More
+## Funzionalità
 
-To learn more about Next.js, take a look at the following resources:
+- Dashboard con statistiche e follow-up imminenti
+- Lista contatti con filtri per stato (Attivo, Lead, Cliente, Archiviato) e ricerca testuale
+- Creazione e modifica contatti
+- Dettaglio contatto con prossima azione
+- Archiviazione contatto con conferma modale
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Fase 2 — Connessione Supabase
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Crea un progetto su [supabase.com](https://supabase.com)
+2. Esegui lo schema SQL in `supabase/schema.sql`
+3. Crea `.env.local`:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+   ```
+4. Installa il client: `npm install @supabase/supabase-js`
+5. Decommenta il codice in `lib/supabase.ts`
+6. Sostituisci gli import di `mock-data` con `supabase` nelle pagine
