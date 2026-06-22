@@ -25,12 +25,18 @@ export async function getContact(id: string): Promise<Contact | undefined> {
   return data as Contact
 }
 
+function sanitize<T extends Record<string, unknown>>(obj: T): T {
+  return Object.fromEntries(
+    Object.entries(obj).map(([k, v]) => [k, v === '' ? null : v])
+  ) as T
+}
+
 export async function createContact(
   contact: Omit<Contact, 'id' | 'created_at' | 'updated_at'>
 ): Promise<Contact> {
   const { data, error } = await supabase
     .from('contacts')
-    .insert(contact)
+    .insert(sanitize(contact))
     .select()
     .single()
   if (error) throw error
@@ -43,7 +49,7 @@ export async function updateContact(
 ): Promise<Contact | null> {
   const { data, error } = await supabase
     .from('contacts')
-    .update(contact)
+    .update(sanitize(contact))
     .eq('id', id)
     .select()
     .single()
