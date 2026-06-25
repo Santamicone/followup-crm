@@ -93,6 +93,17 @@ export default function ContactDetailPage() {
             </dl>
           </div>
 
+          {contact.tags && contact.tags.length > 0 && (
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Tag</h2>
+              <div className="flex flex-wrap gap-2">
+                {contact.tags.map((tag) => (
+                  <span key={tag} className="text-sm bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-medium">{tag}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
           {contact.notes && (
             <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Note</h2>

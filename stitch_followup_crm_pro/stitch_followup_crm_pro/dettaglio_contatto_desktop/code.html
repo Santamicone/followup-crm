@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html lang="it"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dettaglio Contatto | FollowUp CRM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "primary-fixed-dim": "#c0c1ff",
+                "on-error": "#ffffff",
+                "surface-variant": "#dce2f7",
+                "on-background": "#141b2b",
+                "gray-border": "#e5e7eb",
+                "on-surface": "#141b2b",
+                "inverse-on-surface": "#edf0ff",
+                "on-primary-container": "#fffbff",
+                "tertiary-fixed-dim": "#ffb783",
+                "surface-card": "#ffffff",
+                "error": "#ba1a1a",
+                "inverse-primary": "#c0c1ff",
+                "surface-tint": "#494bd6",
+                "surface-dim": "#d3daef",
+                "secondary-fixed": "#e3dfff",
+                "on-secondary": "#ffffff",
+                "tertiary-fixed": "#ffdcc5",
+                "on-secondary-fixed-variant": "#372abf",
+                "surface-bg": "#f9fafb",
+                "on-surface-variant": "#464554",
+                "success": "#22c55e",
+                "on-tertiary-container": "#fffbff",
+                "on-primary-fixed-variant": "#2f2ebe",
+                "secondary-container": "#6860ef",
+                "surface-container": "#e9edff",
+                "on-secondary-container": "#fffbff",
+                "on-tertiary-fixed": "#301400",
+                "on-error-container": "#93000a",
+                "surface-container-lowest": "#ffffff",
+                "outline-variant": "#c7c4d7",
+                "on-tertiary-fixed-variant": "#703700",
+                "secondary-fixed-dim": "#c3c0ff",
+                "primary-container": "#6063ee",
+                "outline": "#767586",
+                "on-primary": "#ffffff",
+                "on-secondary-fixed": "#100069",
+                "tertiary": "#904900",
+                "surface-bright": "#f9f9ff",
+                "surface-container-high": "#e1e8fd",
+                "on-tertiary": "#ffffff",
+                "secondary": "#4e45d5",
+                "surface-container-highest": "#dce2f7",
+                "primary-fixed": "#e1e0ff",
+                "background": "#f9f9ff",
+                "surface-container-low": "#f1f3ff",
+                "on-primary-fixed": "#07006c",
+                "error-container": "#ffdad6",
+                "gray-muted": "#6b7280",
+                "tertiary-container": "#b55d00",
+                "inverse-surface": "#293040",
+                "primary": "#4648d4",
+                "danger": "#ef4444",
+                "surface": "#f9f9ff"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "margin-desktop": "24px",
+                "stack-sm": "8px",
+                "stack-lg": "24px",
+                "margin-mobile": "16px",
+                "gutter": "16px",
+                "base": "4px",
+                "stack-md": "16px"
+            },
+            "fontFamily": {
+                "body-md": ["Inter"],
+                "headline-xl": ["Inter"],
+                "title-md": ["Inter"],
+                "headline-lg": ["Inter"],
+                "label-md": ["Inter"],
+                "headline-lg-mobile": ["Inter"],
+                "body-lg": ["Inter"],
+                "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #141b2b;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .sidebar-active {
+            @apply bg-primary-fixed-dim text-on-primary-fixed;
+        }
+        .custom-shadow {
+            box-shadow: 0 4px 12px rgba(17, 24, 39, 0.05);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex overflow-hidden">
+<!-- Sidebar Persistente (Desktop) -->
+<aside class="w-64 bg-white border-r border-gray-border h-screen flex flex-col z-40 hidden md:flex">
+<div class="p-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="rocket_launch">rocket_launch</span>
+<h1 class="font-title-md text-title-md font-bold text-primary">FollowUp CRM</h1>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-on-surface-variant hover:bg-surface-container-low group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 bg-secondary-fixed text-on-secondary-fixed-variant group" href="#">
+<span class="material-symbols-outlined" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-body-md text-body-md font-bold">Contatti</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-on-surface-variant hover:bg-surface-container-low group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-md text-body-md">Calendario</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-on-surface-variant hover:bg-surface-container-low group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" data-icon="analytics">analytics</span>
+<span class="font-body-md text-body-md">Report</span>
+</a>
+</nav>
+<div class="p-4 mt-auto border-t border-gray-border">
+<div class="flex items-center gap-3 p-2 rounded-xl hover:bg-surface-container-low cursor-pointer transition-colors">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A professional business headshot of a smiling middle-aged man with short brown hair and glasses, wearing a light blue oxford shirt. The lighting is soft and corporate, set against a blurred office background with warm tones. The overall aesthetic is professional, clean, and reliable, consistent with a high-end SaaS CRM platform interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFrRwSl0NZUpV78fn6UPFuXqjR_q6uXUBr_7fYS9mVLc3Yigy8Omb94TI4vL5THaq7EaNQYk6zVwubw0UhEmQ5z_TduD4dBXm0Dv_oUoOd8XsQR_ouHcJmqLmTpCcFZoTjjo8arSgQR55SIgNaxrEn1-tP3vvGM7jhlWvv4nPqXbbCFlTmib6KBJPykdbF_ul6W46jQEusHSexhkjpPNuoOQJwEGn9tfNLvgx83pgFxqFtD5zFaDMQdecQNKJI8OHpou3oFXu7Exk"/>
+<div>
+<p class="font-label-md text-label-md">Marco Rossi</p>
+<p class="text-[10px] text-gray-muted uppercase tracking-wider">Amministratore</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col h-screen overflow-y-auto bg-surface-bg relative">
+<!-- TopAppBar Contextual -->
+<header class="sticky top-0 bg-white/80 backdrop-blur-md z-30 px-margin-desktop py-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 rounded-3xl bg-primary-fixed flex items-center justify-center text-primary-fixed-dim overflow-hidden border-2 border-white shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A high-quality close-up portrait of a professional woman in her 30s with a friendly expression. She has curly dark hair and is wearing a stylish charcoal blazer. The background is a minimalist, softly lit corporate studio with cool blue and white tones, matching the SaaS professionalism and tonal minimalism of the FollowUp CRM brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzIaL7lKkIInKjDG5eB9AYkeACwxxTBoL-xOqC5Yhpgp7xLuxSOTv5TjZeMkoJYUll0dJ5aes0bZnjvvC5_jUEqb9x9b0fCdwF2tGWt4XcuZpYLbPSHCx5UfA0YMwHAyHCdaB2aNMLaFKr2ybBnlW2fj7tWsjMUEI9-u6Ti-qppybri8PAs4LTHdPtCeeOMvhqM1eGsBsw0Nwojr860ZT3A78coGZcdzwiN8xFzpu6WAUpJOmKUvtIhJQBbaybEArPywp1vL3p3FA"/>
+</div>
+<div>
+<div class="flex items-center gap-3">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Alessandra Bianchi</h2>
+<span class="px-3 py-1 bg-success/10 text-success text-label-sm font-label-sm rounded-full flex items-center gap-1.5">
+<span class="w-2 h-2 bg-success rounded-full"></span>
+                            Attivo
+                        </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Marketing Manager presso TechNova Solutions</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 text-on-surface-variant font-label-md text-label-md border border-gray-border rounded-xl hover:bg-surface-container-low transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="archive">archive</span>
+                    Archivia
+                </button>
+<button class="px-6 py-2 bg-primary text-white font-label-md text-label-md rounded-xl hover:bg-secondary-container transition-all shadow-md active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
+                    Modifica
+                </button>
+</div>
+</header>
+<!-- Grid Content -->
+<div class="px-margin-desktop pb-12 grid grid-cols-1 lg:grid-cols-12 gap-stack-lg">
+<!-- Left Column: Info & Timeline (8/12 columns) -->
+<div class="lg:col-span-8 flex flex-col gap-stack-lg">
+<!-- Information Card -->
+<section class="bg-white rounded-[24px] p-stack-lg custom-shadow border border-gray-border">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-title-md text-title-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="info">info</span>
+                            Informazioni Contatto
+                        </h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+<div class="space-y-1">
+<p class="text-label-md font-label-md text-gray-muted uppercase tracking-widest">Email</p>
+<p class="font-body-lg text-body-lg flex items-center gap-2">
+                                alessandra.bianchi@technova.com
+                                <span class="material-symbols-outlined text-gray-muted cursor-pointer hover:text-primary text-[16px]" data-icon="content_copy">content_copy</span>
+</p>
+</div>
+<div class="space-y-1">
+<p class="text-label-md font-label-md text-gray-muted uppercase tracking-widest">Telefono</p>
+<p class="font-body-lg text-body-lg">+39 02 1234 5678</p>
+</div>
+<div class="space-y-1">
+<p class="text-label-md font-label-md text-gray-muted uppercase tracking-widest">Azienda</p>
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="business">business</span>
+</div>
+<p class="font-body-lg text-body-lg">TechNova Solutions S.r.l.</p>
+</div>
+</div>
+<div class="space-y-1">
+<p class="text-label-md font-label-md text-gray-muted uppercase tracking-widest">Data Creazione</p>
+<p class="font-body-lg text-body-lg">12 Ottobre 2023</p>
+</div>
+</div>
+</section>
+<!-- Recent Timeline Card -->
+<section class="bg-white rounded-[24px] p-stack-lg custom-shadow border border-gray-border">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-title-md text-title-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="history">history</span>
+                            Timeline Recente
+                        </h3>
+<button class="text-primary font-label-md text-label-md hover:underline decoration-2 underline-offset-4">Vedi Tutto</button>
+</div>
+<div class="space-y-0 relative">
+<!-- Vertical line for timeline -->
+<div class="absolute left-[19px] top-4 bottom-4 w-0.5 bg-surface-container"></div>
+<!-- Timeline Item 1 -->
+<div class="relative flex gap-6 pb-8 group">
+<div class="z-10 w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary ring-4 ring-white">
+<span class="material-symbols-outlined text-[20px]" data-icon="call">call</span>
+</div>
+<div class="flex-1 pt-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-body-lg text-body-lg font-semibold">Chiamata effettuata</h4>
+<span class="text-label-md font-label-md text-gray-muted">Oggi, 10:30</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Discussione sui requisiti del nuovo progetto Cloud. Alessandra ha mostrato interesse per la demo.</p>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative flex gap-6 pb-8 group">
+<div class="z-10 w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant ring-4 ring-white">
+<span class="material-symbols-outlined text-[20px]" data-icon="mail">mail</span>
+</div>
+<div class="flex-1 pt-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-body-lg text-body-lg font-semibold">Email inviata: Proposta Commerciale</h4>
+<span class="text-label-md font-label-md text-gray-muted">Ieri, 16:45</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Inviato preventivo aggiornato comprensivo di sconti bundle per il Q4.</p>
+</div>
+</div>
+<!-- Timeline Item 3 -->
+<div class="relative flex gap-6 group">
+<div class="z-10 w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant ring-4 ring-white">
+<span class="material-symbols-outlined text-[20px]" data-icon="meeting_room">meeting_room</span>
+</div>
+<div class="flex-1 pt-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-body-lg text-body-lg font-semibold">Incontro conoscitivo</h4>
+<span class="text-label-md font-label-md text-gray-muted">14 Nov, 14:00</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Presso la loro sede. Presentato il portfolio servizi e identificato i decision makers.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Next Action (4/12 columns) -->
+<div class="lg:col-span-4">
+<div class="sticky top-[104px] space-y-stack-lg">
+<!-- Next Action Card -->
+<section class="bg-primary border border-primary/20 rounded-[24px] p-stack-lg shadow-xl text-white overflow-hidden relative">
+<!-- Decorative background element -->
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+<div class="absolute -left-6 -bottom-6 w-32 h-32 bg-secondary-fixed/10 rounded-full blur-2xl"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined" data-icon="event_upcoming">event_upcoming</span>
+<h3 class="font-label-md text-label-md uppercase tracking-widest opacity-90">Prossima Azione</h3>
+</div>
+<div class="mb-8">
+<h4 class="font-headline-lg-mobile text-headline-lg-mobile mb-2">Follow-up Proposta</h4>
+<div class="flex items-center gap-3 bg-white/10 w-fit px-3 py-1.5 rounded-full border border-white/20">
+<span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
+<span class="font-label-md text-label-md">24 Nov 2023 • 15:30</span>
+</div>
+</div>
+<p class="font-body-md text-body-md opacity-80 mb-8 leading-relaxed">
+                                Verificare ricezione del preventivo e rispondere a eventuali dubbi tecnici sul modulo Enterprise.
+                            </p>
+<button class="w-full py-4 bg-white text-primary font-title-md text-title-md rounded-xl hover:bg-surface-bright transition-all active:scale-95 shadow-lg flex items-center justify-center gap-3 group">
+                                Aggiorna azione
+                                <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Quick Notes Widget -->
+<section class="bg-white rounded-[24px] p-stack-md custom-shadow border border-gray-border">
+<h4 class="font-label-md text-label-md text-gray-muted uppercase tracking-widest mb-4">Note Veloci</h4>
+<div class="p-3 bg-surface-container-low rounded-xl mb-4">
+<textarea class="w-full bg-transparent border-none focus:ring-0 text-body-md placeholder:text-gray-muted resize-none h-24" placeholder="Aggiungi una nota veloce..."></textarea>
+</div>
+<button class="w-full py-2 bg-surface-container text-on-surface-variant font-label-md text-label-md rounded-lg hover:bg-surface-container-high transition-colors">
+                            Salva Nota
+                        </button>
+</section>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation (Hidden on desktop) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-white border-t border-gray-border flex justify-around items-center px-4 pb-4 pt-2 shadow-2xl rounded-t-2xl">
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-1">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-fixed text-on-secondary-fixed-variant rounded-full px-4 py-1 active:scale-90 transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="text-label-sm font-label-sm">Contatti</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-1">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="text-label-sm font-label-sm">Nuovo</span>
+</div>
+</nav>
+<script>
+        // Micro-interactions and effects
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.classList.add('scale-95');
+            });
+            button.addEventListener('mouseup', () => {
+                button.classList.remove('scale-95');
+            });
+        });
+
+        // Simple smooth scroll for the main content
+        const mainContent = document.querySelector('main');
+        mainContent.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (mainContent.scrollTop > 20) {
+                header.classList.add('shadow-sm', 'border-b', 'border-gray-border');
+            } else {
+                header.classList.remove('shadow-sm', 'border-b', 'border-gray-border');
+            }
+        });
+    </script>
+</body></html>

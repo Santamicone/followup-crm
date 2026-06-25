@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Contact, ContactStatus, STATUS_LABELS } from '@/lib/types'
 import { createContact, updateContact } from '@/lib/supabase'
 import Button from '@/components/ui/Button'
+import TagInput from '@/components/ui/TagInput'
 
 const STATUSES: ContactStatus[] = ['active', 'lead', 'customer', 'archived']
 
@@ -16,6 +17,7 @@ export default function ContactForm({ contact }: ContactFormProps) {
   const router = useRouter()
   const isEdit = !!contact
 
+  const [tags, setTags] = useState<string[]>(contact?.tags ?? [])
   const [form, setForm] = useState({
     name: contact?.name ?? '',
     email: contact?.email ?? '',
@@ -43,10 +45,10 @@ export default function ContactForm({ contact }: ContactFormProps) {
     setError('')
     try {
       if (isEdit) {
-        await updateContact(contact.id, form)
+        await updateContact(contact.id, { ...form, tags })
         router.push(`/contacts/${contact.id}`)
       } else {
-        const created = await createContact(form)
+        const created = await createContact({ ...form, tags })
         router.push(`/contacts/${created.id}`)
       }
     } catch (err) {
@@ -123,6 +125,11 @@ export default function ContactForm({ contact }: ContactFormProps) {
             </select>
           </div>
         </div>
+      </div>
+
+      <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
+        <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Tag</h2>
+        <TagInput tags={tags} onChange={setTags} />
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">

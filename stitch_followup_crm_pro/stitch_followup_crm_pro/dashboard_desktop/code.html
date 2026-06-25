@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html lang="it"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FollowUp CRM - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#c0c1ff",
+                    "on-error": "#ffffff",
+                    "surface-variant": "#dce2f7",
+                    "on-background": "#141b2b",
+                    "gray-border": "#e5e7eb",
+                    "on-surface": "#141b2b",
+                    "inverse-on-surface": "#edf0ff",
+                    "on-primary-container": "#fffbff",
+                    "tertiary-fixed-dim": "#ffb783",
+                    "surface-card": "#ffffff",
+                    "error": "#ba1a1a",
+                    "inverse-primary": "#c0c1ff",
+                    "surface-tint": "#494bd6",
+                    "surface-dim": "#d3daef",
+                    "secondary-fixed": "#e3dfff",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed": "#ffdcc5",
+                    "on-secondary-fixed-variant": "#372abf",
+                    "surface-bg": "#f9fafb",
+                    "on-surface-variant": "#464554",
+                    "success": "#22c55e",
+                    "on-tertiary-container": "#fffbff",
+                    "on-primary-fixed-variant": "#2f2ebe",
+                    "secondary-container": "#6860ef",
+                    "surface-container": "#e9edff",
+                    "on-secondary-container": "#fffbff",
+                    "on-tertiary-fixed": "#301400",
+                    "on-error-container": "#93000a",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c7c4d7",
+                    "on-tertiary-fixed-variant": "#703700",
+                    "secondary-fixed-dim": "#c3c0ff",
+                    "primary-container": "#6063ee",
+                    "outline": "#767586",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed": "#100069",
+                    "tertiary": "#904900",
+                    "surface-bright": "#f9f9ff",
+                    "surface-container-high": "#e1e8fd",
+                    "on-tertiary": "#ffffff",
+                    "secondary": "#4e45d5",
+                    "surface-container-highest": "#dce2f7",
+                    "primary-fixed": "#e1e0ff",
+                    "background": "#f9f9ff",
+                    "surface-container-low": "#f1f3ff",
+                    "on-primary-fixed": "#07006c",
+                    "error-container": "#ffdad6",
+                    "gray-muted": "#6b7280",
+                    "tertiary-container": "#b55d00",
+                    "inverse-surface": "#293040",
+                    "primary": "#4648d4",
+                    "danger": "#ef4444",
+                    "surface": "#f9f9ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "24px",
+                    "stack-sm": "8px",
+                    "stack-lg": "24px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px",
+                    "base": "4px",
+                    "stack-md": "16px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f9fafb;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .card-shadow {
+        box-shadow: 0 4px 12px rgba(17, 24, 39, 0.05);
+      }
+      .sidebar-transition {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e5e7eb;
+        border-radius: 10px;
+      }
+    </style>
+</head>
+<body class="text-on-surface bg-surface-bg antialiased overflow-hidden h-screen flex">
+<!-- Navigation Sidebar -->
+<aside class="hidden md:flex flex-col w-64 bg-surface h-full border-r border-gray-border sidebar-transition shrink-0 z-40">
+<!-- Brand Area -->
+<div class="px-6 py-8 flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[20px]" data-icon="rocket_launch">rocket_launch</span>
+</div>
+<h1 class="font-title-md text-title-md font-bold text-primary tracking-tight">FollowUp CRM</h1>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 px-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-secondary-fixed text-on-secondary-fixed-variant group transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Contatti</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+<span class="font-label-md text-label-md">Nuovo Contatto</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Impostazioni</span>
+</a>
+</nav>
+<!-- Profile / Bottom Section -->
+<div class="p-4 border-t border-gray-border">
+<div class="flex items-center gap-3 p-2 rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A professional headshot of a smiling young male sales executive in a business casual outfit, shot against a soft-focus office background with warm afternoon sunlight. High-quality corporate photography, clean lighting, and a trustworthy, professional aesthetic that matches a modern CRM software interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRkUKH6sv_ugzPNGb0nB_Y4d2ac-JDInqPWBXSzl21xMGll1bJePXk_oX7WEG_8I3DLLS-O8HVYvL6ws3OK4yYi38Q19eC2KLeQGdHkhnJN3EwKN4cTk0VFT0Ks8UAkSlhFWY-GOEkX5pfI008b0DDktaNRovZJeV4TOPefCpoLoauSUxYc5o-lgumxJdUOfhTJcxMoHaA5XIHtERrOtRgRgli1Vpu5E_e1FxcZiKx3sTvciwyTTlw6-wptoOIreAmqvJDMBrvlmE"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Marco Rossi</span>
+<span class="text-[10px] text-on-surface-variant font-medium">Sales Admin</span>
+</div>
+<span class="material-symbols-outlined ml-auto text-on-surface-variant text-[18px]" data-icon="more_vert">more_vert</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col h-full overflow-hidden">
+<!-- Top App Bar (Header) -->
+<header class="h-16 flex items-center justify-between px-margin-desktop bg-surface/80 backdrop-blur-md z-30 shrink-0">
+<div class="flex flex-col">
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Dashboard</h2>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" id="current-date">Lunedì, 12 Maggio 2024</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 w-64 bg-surface-container-low border-none rounded-full text-body-md focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Cerca lead o attività..." type="text"/>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors relative">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+</div>
+</header>
+<!-- Scrollable Body -->
+<div class="flex-1 overflow-y-auto custom-scrollbar px-margin-desktop py-stack-lg space-y-stack-lg">
+<!-- Welcome Section -->
+<section class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h3 class="font-headline-xl text-headline-xl text-on-surface">Buongiorno, Marco! 👋</h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Ecco cosa sta succedendo oggi nella tua pipeline.</p>
+</div>
+<button class="bg-primary hover:bg-primary-container text-white px-6 py-3 rounded-xl font-label-md text-label-md flex items-center gap-2 transition-all active:scale-95 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                    Nuovo Lead
+                </button>
+</section>
+<!-- Summary Cards Bento -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Card 1 -->
+<div class="bg-surface-card p-5 rounded-[24px] card-shadow border border-gray-border flex flex-col gap-2 group hover:border-primary transition-colors duration-300">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 bg-primary-fixed-dim/20 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="contact_page">contact_page</span>
+</div>
+<span class="text-success font-label-md flex items-center gap-0.5">+12% <span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span></span>
+</div>
+<span class="text-on-surface-variant font-label-md mt-2">Contatti Attivi</span>
+<span class="text-[28px] font-bold text-on-surface">1,284</span>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-card p-5 rounded-[24px] card-shadow border border-gray-border flex flex-col gap-2 group hover:border-primary transition-colors duration-300">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 bg-secondary-fixed/30 rounded-full flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="rocket">rocket</span>
+</div>
+<span class="text-success font-label-md flex items-center gap-0.5">+4% <span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span></span>
+</div>
+<span class="text-on-surface-variant font-label-md mt-2">Lead Generati</span>
+<span class="text-[28px] font-bold text-on-surface">85</span>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-card p-5 rounded-[24px] card-shadow border border-gray-border flex flex-col gap-2 group hover:border-primary transition-colors duration-300">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 bg-tertiary-fixed/30 rounded-full flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+</div>
+<span class="text-on-surface-variant font-label-md">Questo mese</span>
+</div>
+<span class="text-on-surface-variant font-label-md mt-2">Clienti Chiusi</span>
+<span class="text-[28px] font-bold text-on-surface">24</span>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-card p-5 rounded-[24px] card-shadow border border-gray-border flex flex-col gap-2 group hover:border-primary transition-colors duration-300">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 bg-error-container/30 rounded-full flex items-center justify-center text-error">
+<span class="material-symbols-outlined" data-icon="event_busy">event_busy</span>
+</div>
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded font-label-sm">Urgenti</span>
+</div>
+<span class="text-on-surface-variant font-label-md mt-2">Follow-up Scaduti</span>
+<span class="text-[28px] font-bold text-error">7</span>
+</div>
+</section>
+<!-- Main Split Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-stack-lg items-start">
+<!-- Detailed Table Section -->
+<section class="lg:col-span-2 bg-surface-card rounded-[24px] card-shadow border border-gray-border overflow-hidden">
+<div class="px-6 py-5 border-b border-gray-border flex items-center justify-between">
+<h4 class="font-title-md text-title-md text-on-surface">Prossimi Follow-up</h4>
+<button class="text-primary font-label-md hover:underline">Vedi tutti</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Contatto</th>
+<th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Stato</th>
+<th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Data/Ora</th>
+<th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Azione</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-border">
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-fixed text-primary font-bold flex items-center justify-center text-[12px]">LD</div>
+<div>
+<div class="font-body-md font-semibold">Luca Donati</div>
+<div class="text-[12px] text-on-surface-variant">Soluzioni Tech S.r.l.</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full bg-blue-100 text-blue-700 font-label-sm">Primo Contatto</span>
+</td>
+<td class="px-6 py-4">
+<div class="text-body-md font-medium text-on-surface">Oggi</div>
+<div class="text-[12px] text-on-surface-variant">14:30</div>
+</td>
+<td class="px-6 py-4">
+<button class="p-2 rounded-lg hover:bg-surface-container-high transition-colors text-primary">
+<span class="material-symbols-outlined" data-icon="call">call</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed text-secondary font-bold flex items-center justify-center text-[12px]">SB</div>
+<div>
+<div class="font-body-md font-semibold">Sara Bianchi</div>
+<div class="text-[12px] text-on-surface-variant">Freelance Art</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full bg-purple-100 text-purple-700 font-label-sm">In Negoziazione</span>
+</td>
+<td class="px-6 py-4">
+<div class="text-body-md font-medium text-on-surface">Oggi</div>
+<div class="text-[12px] text-on-surface-variant">16:00</div>
+</td>
+<td class="px-6 py-4">
+<button class="p-2 rounded-lg hover:bg-surface-container-high transition-colors text-primary">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed text-tertiary font-bold flex items-center justify-center text-[12px]">GM</div>
+<div>
+<div class="font-body-md font-semibold">Giovanni Moretti</div>
+<div class="text-[12px] text-on-surface-variant">Global Logistics</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full bg-green-100 text-green-700 font-label-sm">Proposta Inviata</span>
+</td>
+<td class="px-6 py-4">
+<div class="text-body-md font-medium text-on-surface">Domani</div>
+<div class="text-[12px] text-on-surface-variant">10:00</div>
+</td>
+<td class="px-6 py-4">
+<button class="p-2 rounded-lg hover:bg-surface-container-high transition-colors text-primary">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Sidebar Widgets -->
+<aside class="space-y-stack-lg">
+<!-- Calendar Widget -->
+<section class="bg-surface-card p-6 rounded-[24px] card-shadow border border-gray-border">
+<div class="flex items-center justify-between mb-6">
+<h4 class="font-title-md text-title-md text-on-surface">Agenda</h4>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container-low text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container-low text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-7 gap-y-4 text-center mb-4">
+<span class="font-label-md text-on-surface-variant">L</span>
+<span class="font-label-md text-on-surface-variant">M</span>
+<span class="font-label-md text-on-surface-variant">M</span>
+<span class="font-label-md text-on-surface-variant">G</span>
+<span class="font-label-md text-on-surface-variant">V</span>
+<span class="font-label-md text-on-surface-variant">S</span>
+<span class="font-label-md text-on-surface-variant">D</span>
+<span class="text-body-md text-outline-variant">28</span>
+<span class="text-body-md text-outline-variant">29</span>
+<span class="text-body-md text-outline-variant">30</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer">1</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer">2</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer">3</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer">4</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer">5</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer">6</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer">7</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer">8</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer">9</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer">10</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer">11</span>
+<span class="text-body-md p-2 rounded-full bg-primary text-white font-bold ring-4 ring-primary/20 cursor-pointer">12</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer relative after:content-[''] after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-error after:rounded-full">13</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer">14</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer">15</span>
+<span class="text-body-md p-2 rounded-full hover:bg-surface-container-low cursor-pointer">16</span>
+</div>
+<div class="mt-6 pt-6 border-t border-gray-border space-y-4">
+<h5 class="font-label-md text-on-surface-variant uppercase tracking-widest">Eventi Oggi</h5>
+<div class="flex items-start gap-3">
+<div class="w-1.5 h-10 bg-primary rounded-full shrink-0"></div>
+<div>
+<p class="font-body-md font-semibold text-on-surface">Demo con Client X</p>
+<p class="text-[12px] text-on-surface-variant">15:00 - Zoom Meeting</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Add Widget -->
+<section class="bg-primary/5 p-6 rounded-[24px] border border-primary/20">
+<h4 class="font-title-md text-title-md text-primary mb-2">Suggerimento AI</h4>
+<p class="font-body-md text-on-surface-variant mb-4">Sembra che tu non senta Mario Neri da 10 giorni. Vuoi programmare un follow-up?</p>
+<button class="w-full bg-primary text-white py-2.5 rounded-xl font-label-md shadow-md shadow-primary/10 hover:shadow-lg transition-all active:scale-95">Pianifica ora</button>
+</section>
+</aside>
+</div>
+</div>
+</main>
+<!-- Mobile Navigation (visible on small screens) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-gray-border h-16 flex justify-around items-center px-4 pb-1 z-50">
+<a class="flex flex-col items-center justify-center gap-0.5 text-primary" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-sm text-label-sm">Contatti</span>
+</a>
+<button class="w-12 h-12 -mt-10 bg-primary text-white rounded-full shadow-lg flex items-center justify-center ring-4 ring-surface">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<a class="flex flex-col items-center justify-center gap-0.5 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="font-label-sm text-label-sm">Agenda</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm">Impostazioni</span>
+</a>
+</nav>
+<script>
+        // Set dynamic date
+        const dateEl = document.getElementById('current-date');
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const formattedDate = now.toLocaleDateString('it-IT', options);
+        dateEl.textContent = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+
+        // Simple interactive effect for cards
+        document.querySelectorAll('.card-shadow').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+                card.style.transition = 'transform 0.2s ease-out';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0px)';
+            });
+        });
+    </script>
+</body></html>

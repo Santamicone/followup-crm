@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+
+<html lang="it"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FollowUp CRM - Gestione Contatti</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#c0c1ff",
+                    "on-error": "#ffffff",
+                    "surface-variant": "#dce2f7",
+                    "on-background": "#141b2b",
+                    "gray-border": "#e5e7eb",
+                    "on-surface": "#141b2b",
+                    "inverse-on-surface": "#edf0ff",
+                    "on-primary-container": "#fffbff",
+                    "tertiary-fixed-dim": "#ffb783",
+                    "surface-card": "#ffffff",
+                    "error": "#ba1a1a",
+                    "inverse-primary": "#c0c1ff",
+                    "surface-tint": "#494bd6",
+                    "surface-dim": "#d3daef",
+                    "secondary-fixed": "#e3dfff",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed": "#ffdcc5",
+                    "on-secondary-fixed-variant": "#372abf",
+                    "surface-bg": "#f9fafb",
+                    "on-surface-variant": "#464554",
+                    "success": "#22c55e",
+                    "on-tertiary-container": "#fffbff",
+                    "on-primary-fixed-variant": "#2f2ebe",
+                    "secondary-container": "#6860ef",
+                    "surface-container": "#e9edff",
+                    "on-secondary-container": "#fffbff",
+                    "on-tertiary-fixed": "#301400",
+                    "on-error-container": "#93000a",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c7c4d7",
+                    "on-tertiary-fixed-variant": "#703700",
+                    "secondary-fixed-dim": "#c3c0ff",
+                    "primary-container": "#6063ee",
+                    "outline": "#767586",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed": "#100069",
+                    "tertiary": "#904900",
+                    "surface-bright": "#f9f9ff",
+                    "surface-container-high": "#e1e8fd",
+                    "on-tertiary": "#ffffff",
+                    "secondary": "#4e45d5",
+                    "surface-container-highest": "#dce2f7",
+                    "primary-fixed": "#e1e0ff",
+                    "background": "#f9f9ff",
+                    "surface-container-low": "#f1f3ff",
+                    "on-primary-fixed": "#07006c",
+                    "error-container": "#ffdad6",
+                    "gray-muted": "#6b7280",
+                    "tertiary-container": "#b55d00",
+                    "inverse-surface": "#293040",
+                    "primary": "#4648d4",
+                    "danger": "#ef4444",
+                    "surface": "#f9f9ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "24px",
+                    "stack-sm": "8px",
+                    "stack-lg": "24px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px",
+                    "base": "4px",
+                    "stack-md": "16px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f9fafb; /* surface-bg from branding */
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        vertical-align: middle;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e5e7eb;
+        border-radius: 10px;
+      }
+      .card-shadow {
+        box-shadow: 0 4px 12px rgba(17, 24, 39, 0.05);
+      }
+      .active-nav-bg {
+        background-color: #e3dfff; /* secondary-fixed */
+      }
+    </style>
+</head>
+<body class="text-on-surface">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-border h-full z-50">
+<div class="p-6">
+<div class="text-primary font-headline-lg text-headline-lg tracking-tight">FollowUp</div>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-on-surface-variant hover:bg-surface-container-low group" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors bg-secondary-fixed text-on-secondary-fixed-variant group font-bold" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-body-md text-body-md">Contatti</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-on-surface-variant hover:bg-surface-container-low group" href="#">
+<span class="material-symbols-outlined text-[24px]">calendar_today</span>
+<span class="font-body-md text-body-md">Attività</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-on-surface-variant hover:bg-surface-container-low group" href="#">
+<span class="material-symbols-outlined text-[24px]">insights</span>
+<span class="font-body-md text-body-md">Report</span>
+</a>
+<div class="pt-8 pb-2 px-4">
+<span class="text-label-md font-label-md text-outline uppercase tracking-widest">Impostazioni</span>
+</div>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-on-surface-variant hover:bg-surface-container-low group" href="#">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<span class="font-body-md text-body-md">Account</span>
+</a>
+</nav>
+<div class="p-4 border-t border-gray-border">
+<div class="flex items-center gap-3 p-2 rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-10 h-10 rounded-full bg-primary-fixed-dim flex items-center justify-center text-primary font-bold overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional studio headshot of a smiling business professional for a CRM user profile avatar. The lighting is bright and airy with a neutral grey background, following a modern corporate aesthetic with high-key illumination." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2f_OOUdYwrs7jdJhZVldgCm3IvRO845btJBnPSUpRay4nlmla-jwgfmyEDnjOPcB0wcMBFsYYGgggYd0a14iMRWlrzJ2dUwqFKmTqSZvV6wFVFzUB9UaVP53Y3D-UwW6VLYCuB2EkWQFju37YnTeszx0lQsOqiCzbgJLFEQ44aPVYs-sF6aOvAC1DDq_b2WzfJcZUz3QJO3QOYzkGwbHeVmG3BRaag4WhEzSqWmI2ZV2jr_TD6cj_jfK_jrn928E0_jbvJZMAA0g"/>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="font-body-md text-body-md font-semibold truncate">Marco Rossi</p>
+<p class="text-label-sm font-label-sm text-gray-muted truncate">Admin</p>
+</div>
+<span class="material-symbols-outlined text-outline">more_vert</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 bg-surface-bg overflow-hidden relative">
+<!-- Top App Bar -->
+<header class="bg-white px-margin-desktop py-4 flex items-center justify-between border-b border-gray-border sticky top-0 z-40">
+<div class="flex-1 max-w-2xl relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-12 pr-4 py-3 rounded-full border border-gray-border focus:ring-2 focus:ring-primary focus:border-primary bg-surface-bg transition-all font-body-md text-body-md outline-none" placeholder="Cerca contatti, aziende o email..." type="text"/>
+</div>
+<div class="flex items-center gap-4 ml-8">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-danger rounded-full border-2 border-white"></span>
+</button>
+<button class="bg-primary text-white px-6 py-2.5 rounded-full font-label-md text-label-md flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-md">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        Nuovo Contatto
+                    </button>
+</div>
+</header>
+<!-- Content Scrollable Area -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-margin-desktop">
+<div class="max-w-7xl mx-auto space-y-stack-lg">
+<!-- Header & Tabs -->
+<div class="space-y-stack-md">
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Contatti</h1>
+<div class="flex items-center border-b border-gray-border gap-8 overflow-x-auto no-scrollbar">
+<button class="px-1 py-4 border-b-2 border-primary text-primary font-label-md text-label-md transition-all whitespace-nowrap">Tutti (248)</button>
+<button class="px-1 py-4 border-b-2 border-transparent text-on-surface-variant hover:text-primary font-label-md text-label-md transition-all whitespace-nowrap">Attivi (120)</button>
+<button class="px-1 py-4 border-b-2 border-transparent text-on-surface-variant hover:text-primary font-label-md text-label-md transition-all whitespace-nowrap">Lead (84)</button>
+<button class="px-1 py-4 border-b-2 border-transparent text-on-surface-variant hover:text-primary font-label-md text-label-md transition-all whitespace-nowrap">Archiviati (44)</button>
+</div>
+</div>
+<!-- Filter Bar / Controls -->
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 border border-gray-border rounded-lg bg-white text-on-surface-variant hover:bg-surface-container-low transition-colors font-body-md text-body-md">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                                Filtri
+                            </button>
+<button class="flex items-center gap-2 px-4 py-2 border border-gray-border rounded-lg bg-white text-on-surface-variant hover:bg-surface-container-low transition-colors font-body-md text-body-md">
+<span class="material-symbols-outlined text-[18px]">sort</span>
+                                Ordina per
+                            </button>
+</div>
+<div class="text-label-md font-label-md text-gray-muted">
+                            Mostrando <span class="text-on-surface font-semibold">1-10</span> di <span class="text-on-surface font-semibold">248</span>
+</div>
+</div>
+<!-- Contacts Table Card -->
+<div class="bg-white rounded-[24px] card-shadow overflow-hidden border border-gray-border">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant uppercase">
+<th class="px-6 py-4 font-label-md text-label-md tracking-wider">Nome</th>
+<th class="px-6 py-4 font-label-md text-label-md tracking-wider">Azienda</th>
+<th class="px-6 py-4 font-label-md text-label-md tracking-wider">Email</th>
+<th class="px-6 py-4 font-label-md text-label-md tracking-wider">Telefono</th>
+<th class="px-6 py-4 font-label-md text-label-md tracking-wider">Stato</th>
+<th class="px-6 py-4 font-label-md text-label-md tracking-wider">Data Creazione</th>
+<th class="px-6 py-4 font-label-md text-label-md tracking-wider text-center">Azioni</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-border">
+<!-- Contact Row 1 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-gray-border">
+<img class="w-full h-full object-cover" data-alt="A detailed digital portrait of a female creative professional with a friendly expression. The image features a clean white workspace background with soft lighting, matching the modern CRM interface aesthetic with a bright, high-contrast light-mode style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuALaiPfOEKnlrbaiibKwMxdvRiHAjEqscx_e_Lm1ur_SuX-3UKh_0DiEtdaI6EbhcZVv1ize-VkYtUtt-NWbZu4VzmBf6blX_Sb-PLmEkg4IK31oOOmrkXtDwv1KmV2Wi84s_3obUh3bUKxPHYyW7Aky33UKDtR_KBJPD-Gps4jCuiixXW_36lZeaV4Kiu-GbfAz9s70lBPATuJMkE_Hgu4pyQTVaPStgHvl3UW4HKvH7DCKZEuk1eExeCjBS_f1ZG9BVPihVzS9qc"/>
+</div>
+<div class="font-body-md text-body-md font-semibold">Elena Bianchi</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Creative Hub SRL</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">elena.b@creativehub.it</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">+39 342 881 2933</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-label-sm font-label-sm bg-green-100 text-green-700">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
+                                                Attivo
+                                            </span>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">12 Ott 2023</td>
+<td class="px-6 py-4 text-center">
+<button class="p-2 rounded-full hover:bg-surface-container-low text-outline-variant transition-colors group-hover:text-on-surface">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Contact Row 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-gray-border">
+<img class="w-full h-full object-cover" data-alt="A headshot of a male executive in a sleek dark blue blazer, presented in a minimal and bright digital setting. The background is softly blurred with hints of a modern office, consistent with high-velocity SaaS design principles and clean corporate branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC03Nh-mEcihbHNeyCkHRFwwlPjllW0rty_ICIVTPbHgmZrNzA9C3LTOliNq504R16ptrtfviILLWxt9Prv639W1yAFKETIf0HOYt3CMzVCQoFrEE5yRbnoww_GiBhh5cAgrNTWz9_cEZBM4hCNtW1q67HddgtpossaT3yefnVlkQ-4tRfAobF5sEKxKQliIZZCJ-DUYGZ8PVs9z-_x2_qtXWlhfbJR8o3936bF0N6ieae65puoWe_R5i6wJcm-LgruHOXGqALMwPQ"/>
+</div>
+<div class="font-body-md text-body-md font-semibold">Giuseppe Verdi</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Industria Digitale Spa</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">g.verdi@indigitale.it</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">+39 333 112 4556</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-label-sm font-label-sm bg-blue-100 text-blue-700">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-2"></span>
+                                                Lead
+                                            </span>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">04 Gen 2024</td>
+<td class="px-6 py-4 text-center">
+<button class="p-2 rounded-full hover:bg-surface-container-low text-outline-variant transition-colors group-hover:text-on-surface">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Contact Row 3 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-gray-border">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a woman with glasses, smiling confidently against a crisp, high-key white background. The photo is styled for a modern business software application, emphasizing clarity, professionalism, and the clean aesthetic of a premium CRM platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAORsW3jS9Mvi_4itY3v5WLm-txBHLqt0qs7tH1KoAWOc6Uh8B05WGkkq0oMbQ9TDykEmAkHJqzZ3XreBuIaiSQuh-_e0KvIn9rO-hxm0ZwcyHPu_sL_2g5ytob66Rgto66Xj6yFggxNco2g5OlnMT4o86dmJ8KtbINzMMWkYON06E9_ZvzcvbdxKZcBAOa5hAP7mDdVfn04tMMVBqmgCUDX9WpJgyhq_zzILGz7VS6ZuCWHJMsGGAorHfFdVto7Bls-x_pDMU1Nw"/>
+</div>
+<div class="font-body-md text-body-md font-semibold">Sofia Fontana</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Design Studio X</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">sofia@studiox.com</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">+39 328 900 8821</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-label-sm font-label-sm bg-gray-100 text-gray-700">
+<span class="w-1.5 h-1.5 rounded-full bg-gray-400 mr-2"></span>
+                                                Archiviato
+                                            </span>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">15 Set 2023</td>
+<td class="px-6 py-4 text-center">
+<button class="p-2 rounded-full hover:bg-surface-container-low text-outline-variant transition-colors group-hover:text-on-surface">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Contact Row 4 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-gray-border">
+<img class="w-full h-full object-cover" data-alt="A clean, professionally lit headshot of a middle-aged man in business attire. The setting is a minimalist office with large windows, creating a bright, airy vibe that matches a modern corporate software UI. The style is crisp and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6CqkJfdxulp99j4Rt3CMg3CIgqYUz0J3KIHgvadshHqSFnesbl63XuUsTgaQ-SQ8ZA_vGDGDmQoCJt0_634CKqUezYacGxDGz9FYuKWGtbkOjmHKZJ6zPiCzByrhGO-2SNKzNA36VNp7ieLG3JoyxDzPfPKwabQ-p2vbUj9wQSaXSuRarGLqSOT5pcoZLUFcVALijecR-2L9hjOKbBubf3_952FTc8lSB3MtR1dFV8rswNl-UAHQlLvHegUP8lHn0dT9BGx_reCs"/>
+</div>
+<div class="font-body-md text-body-md font-semibold">Luca Neri</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Logistica Plus</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">l.neri@logisticaplus.it</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">+39 347 122 0098</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-label-sm font-label-sm bg-green-100 text-green-700">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
+                                                Attivo
+                                            </span>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">22 Feb 2024</td>
+<td class="px-6 py-4 text-center">
+<button class="p-2 rounded-full hover:bg-surface-container-low text-outline-variant transition-colors group-hover:text-on-surface">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Contact Row 5 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-gray-border">
+<img class="w-full h-full object-cover" data-alt="High-quality professional avatar of a young tech entrepreneur for a CRM interface. Bright, daylight lighting, clean office backdrop with modern furniture, following a tonal minimalist design system with soft structural elements." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQy1H_7L_wzcjSn9xzilK73gfiUNWUffOKNEmwUotDjmMzONX3hzodOfeFw0l3iJE-KouHXpXHu-q5JFo0r46QBxHMfp68DA1JSrruRLOgzkcgiTzVzpFZJfZwHU2_0fxrNJUDxVjWz8WqVfnFVDBGKOARxgDJQv6GwAflmqrOla-kGbvsZmu0YL3HI-byxJAejfIG_PB7n9Jqyesc416hhCO7hcasVBllnueb4koQ8UOL9uWpRP0S3WeU4Mzh8TvUI5g9rLZHPLM"/>
+</div>
+<div class="font-body-md text-body-md font-semibold">Matteo Ricci</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">StartUp Horizon</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">matteo@horizon.com</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">+39 335 667 8812</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-label-sm font-label-sm bg-blue-100 text-blue-700">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-2"></span>
+                                                Lead
+                                            </span>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">10 Mar 2024</td>
+<td class="px-6 py-4 text-center">
+<button class="p-2 rounded-full hover:bg-surface-container-low text-outline-variant transition-colors group-hover:text-on-surface">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 border-t border-gray-border flex items-center justify-between">
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-border text-on-surface-variant hover:bg-surface-container-low disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white font-body-md text-body-md">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container-low font-body-md text-body-md">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container-low font-body-md text-body-md">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-border text-on-surface-variant hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-body-md text-on-surface-variant">Righe per pagina:</span>
+<select class="border border-gray-border rounded-lg px-2 py-1 bg-white text-body-md focus:ring-primary focus:border-primary outline-none">
+<option>10</option>
+<option>25</option>
+<option>50</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Statistics Summary / Mini Bento Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-white p-6 rounded-[24px] card-shadow border border-gray-border">
+<div class="flex items-center gap-4 mb-2">
+<div class="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">trending_up</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Lead Nuovi</span>
+</div>
+<div class="flex items-end justify-between">
+<span class="text-headline-lg font-headline-lg">24</span>
+<span class="text-success text-label-md font-label-md flex items-center gap-1 mb-1">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                                    12%
+                                </span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-[24px] card-shadow border border-gray-border">
+<div class="flex items-center gap-4 mb-2">
+<div class="w-10 h-10 rounded-xl bg-secondary-fixed flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">call</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Chiamate Oggi</span>
+</div>
+<div class="flex items-end justify-between">
+<span class="text-headline-lg font-headline-lg">15</span>
+<span class="text-gray-muted text-label-md font-label-md mb-1">Target: 20</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-[24px] card-shadow border border-gray-border">
+<div class="flex items-center gap-4 mb-2">
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">event</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Appuntamenti</span>
+</div>
+<div class="flex items-end justify-between">
+<span class="text-headline-lg font-headline-lg">8</span>
+<span class="text-on-surface-variant text-label-md font-label-md mb-1">Prossima: 14:30</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Action for Mobile (Hidden on desktop as per request but kept for completeness of UI logic) -->
+<div class="md:hidden fixed bottom-6 right-6">
+<button class="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-xl active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+</div>
+</main>
+</div>
+<!-- Micro-interaction Scripts -->
+<script>
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('click', (e) => {
+                if(!e.target.closest('button')) {
+                    // Logic for opening contact details
+                    console.log('Open details for:', row.querySelector('.font-semibold').innerText);
+                }
+            });
+        });
+
+        // Tab switching logic (Visual only)
+        const tabs = document.querySelectorAll('button[class*="border-b-2"]');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => {
+                    t.classList.remove('border-primary', 'text-primary');
+                    t.classList.add('border-transparent', 'text-on-surface-variant');
+                });
+                tab.classList.add('border-primary', 'text-primary');
+                tab.classList.remove('border-transparent', 'text-on-surface-variant');
+            });
+        });
+    </script>
+</body></html>

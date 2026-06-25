@@ -10,6 +10,7 @@ create table if not exists contacts (
   status text not null default 'active'
     check (status in ('active', 'archived', 'lead', 'customer')),
   notes text,
+  tags text[] default '{}',
   next_action text,
   next_action_date date,
   created_at timestamptz not null default now(),
