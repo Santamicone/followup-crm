@@ -15,36 +15,46 @@ export default function ContactCard({ contact }: ContactCardProps) {
     .toUpperCase()
 
   return (
-    <Link href={`/contacts/${contact.id}`} className="block bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md hover:border-indigo-200 transition-all">
+    <Link
+      href={`/contacts/${contact.id}`}
+      className="block bg-surface-card rounded-[24px] card-shadow border border-gray-border p-5 hover:border-primary transition-all duration-200 group"
+    >
       <div className="flex items-start gap-4">
-        <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm font-bold shrink-0">
+        <div className="w-11 h-11 rounded-full bg-primary-fixed text-primary flex items-center justify-center text-sm font-bold shrink-0">
           {initials}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <p className="text-sm font-semibold text-gray-900">{contact.name}</p>
+            <p className="text-sm font-semibold text-on-surface">{contact.name}</p>
             <Badge status={contact.status} />
           </div>
-          {contact.company && <p className="text-xs text-gray-400 mt-0.5">{contact.company}</p>}
-          {contact.email && <p className="text-xs text-gray-500 mt-1">{contact.email}</p>}
+          {contact.company && (
+            <p className="text-xs text-on-surface-variant mt-0.5">{contact.company}</p>
+          )}
+          {contact.email && (
+            <p className="text-xs text-on-surface-variant mt-1">{contact.email}</p>
+          )}
           {contact.tags && contact.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
               {contact.tags.slice(0, 3).map((tag) => (
-                <span key={tag} className="text-xs bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full">{tag}</span>
+                <span key={tag} className="text-xs bg-surface-container text-primary px-2 py-0.5 rounded-full font-medium">
+                  {tag}
+                </span>
               ))}
               {contact.tags.length > 3 && (
-                <span className="text-xs text-gray-400">+{contact.tags.length - 3}</span>
+                <span className="text-xs text-on-surface-variant">+{contact.tags.length - 3}</span>
               )}
             </div>
           )}
         </div>
       </div>
       {contact.next_action && (
-        <div className="mt-3 pt-3 border-t border-gray-100">
-          <p className="text-xs text-gray-500">
-            <span className="font-medium text-gray-700">Prossima azione:</span> {contact.next_action}
+        <div className="mt-4 pt-3 border-t border-gray-border">
+          <p className="text-xs text-on-surface-variant">
+            <span className="font-semibold text-on-surface">Prossima azione:</span>{' '}
+            {contact.next_action}
             {contact.next_action_date && (
-              <span className="ml-1 text-indigo-600 font-medium">
+              <span className="ml-1 text-primary font-semibold">
                 ({new Date(contact.next_action_date).toLocaleDateString('it-IT')})
               </span>
             )}

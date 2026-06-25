@@ -34,19 +34,22 @@ export default function ContactDetailPage() {
     d ? new Date(d).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) : '—'
 
   if (loading) {
-    return <div className="text-center py-16 text-gray-400">Caricamento…</div>
+    return <div className="text-center py-16 text-on-surface-variant">Caricamento…</div>
   }
 
   if (!contact) {
     return (
-      <div className="text-center py-16 text-gray-400">
-        <p className="text-lg">Contatto non trovato</p>
-        <Link href="/contacts" className="text-indigo-600 text-sm hover:underline mt-2 inline-block">
+      <div className="text-center py-16 text-on-surface-variant">
+        <span className="material-symbols-outlined text-[48px] mb-3 block">person_off</span>
+        <p className="text-lg font-semibold">Contatto non trovato</p>
+        <Link href="/contacts" className="text-primary text-sm hover:underline mt-2 inline-block">
           Torna ai contatti
         </Link>
       </div>
     )
   }
+
+  const initials = contact.name.split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase()
 
   return (
     <div>
@@ -56,10 +59,16 @@ export default function ContactDetailPage() {
         actions={
           <div className="flex gap-2">
             <Link href={`/contacts/${id}/edit`}>
-              <Button variant="secondary">Modifica</Button>
+              <Button variant="secondary">
+                <span className="material-symbols-outlined text-[16px]">edit</span>
+                Modifica
+              </Button>
             </Link>
             {contact.status !== 'archived' && (
-              <Button variant="danger" onClick={() => setShowArchiveModal(true)}>Archivia</Button>
+              <Button variant="danger" onClick={() => setShowArchiveModal(true)}>
+                <span className="material-symbols-outlined text-[16px]">archive</span>
+                Archivia
+              </Button>
             )}
           </div>
         }
@@ -67,67 +76,75 @@ export default function ContactDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-4xl">
         <div className="lg:col-span-2 space-y-4">
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Informazioni</h2>
+          {/* Avatar + Info header */}
+          <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-14 h-14 rounded-full bg-primary-fixed text-primary flex items-center justify-center text-xl font-bold">
+                {initials}
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-on-surface">{contact.name}</h2>
+                {contact.company && <p className="text-sm text-on-surface-variant">{contact.company}</p>}
+                <div className="mt-1"><Badge status={contact.status} /></div>
+              </div>
+            </div>
+
+            <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-4">Informazioni</h3>
             <dl className="space-y-3">
-              <div className="flex gap-3">
-                <dt className="text-sm text-gray-500 w-28 shrink-0">Stato</dt>
-                <dd><Badge status={contact.status} /></dd>
-              </div>
-              <div className="flex gap-3">
-                <dt className="text-sm text-gray-500 w-28 shrink-0">Email</dt>
-                <dd className="text-sm text-gray-900">{contact.email || '—'}</dd>
-              </div>
-              <div className="flex gap-3">
-                <dt className="text-sm text-gray-500 w-28 shrink-0">Telefono</dt>
-                <dd className="text-sm text-gray-900">{contact.phone || '—'}</dd>
-              </div>
-              <div className="flex gap-3">
-                <dt className="text-sm text-gray-500 w-28 shrink-0">Azienda</dt>
-                <dd className="text-sm text-gray-900">{contact.company || '—'}</dd>
-              </div>
-              <div className="flex gap-3">
-                <dt className="text-sm text-gray-500 w-28 shrink-0">Creato il</dt>
-                <dd className="text-sm text-gray-900">{formatDate(contact.created_at)}</dd>
-              </div>
+              {[
+                { label: 'Email', value: contact.email, icon: 'mail' },
+                { label: 'Telefono', value: contact.phone, icon: 'call' },
+                { label: 'Azienda', value: contact.company, icon: 'business' },
+                { label: 'Creato il', value: formatDate(contact.created_at), icon: 'calendar_today' },
+              ].map(({ label, value, icon }) => (
+                <div key={label} className="flex items-center gap-3">
+                  <span className="material-symbols-outlined text-[18px] text-on-surface-variant w-5 shrink-0">{icon}</span>
+                  <dt className="text-sm text-on-surface-variant w-24 shrink-0">{label}</dt>
+                  <dd className="text-sm text-on-surface">{value || '—'}</dd>
+                </div>
+              ))}
             </dl>
           </div>
 
           {contact.tags && contact.tags.length > 0 && (
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Tag</h2>
+            <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6">
+              <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">Tag</h3>
               <div className="flex flex-wrap gap-2">
                 {contact.tags.map((tag) => (
-                  <span key={tag} className="text-sm bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-medium">{tag}</span>
+                  <span key={tag} className="text-sm bg-surface-container text-primary px-3 py-1 rounded-full font-medium">
+                    {tag}
+                  </span>
                 ))}
               </div>
             </div>
           )}
 
           {contact.notes && (
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Note</h2>
-              <p className="text-sm text-gray-700 whitespace-pre-wrap">{contact.notes}</p>
+            <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6">
+              <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">Note</h3>
+              <p className="text-sm text-on-surface whitespace-pre-wrap leading-relaxed">{contact.notes}</p>
             </div>
           )}
         </div>
 
         <div>
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Prossima azione</h2>
+          <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6">
+            <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-4">Prossima azione</h3>
             {contact.next_action ? (
               <>
-                <p className="text-sm text-gray-900 font-medium">{contact.next_action}</p>
+                <p className="text-sm text-on-surface font-medium">{contact.next_action}</p>
                 {contact.next_action_date && (
-                  <p className="text-xs text-indigo-600 mt-1 font-medium">{formatDate(contact.next_action_date)}</p>
+                  <p className="text-xs text-primary mt-1 font-semibold">{formatDate(contact.next_action_date)}</p>
                 )}
               </>
             ) : (
-              <p className="text-sm text-gray-400">Nessuna azione pianificata</p>
+              <p className="text-sm text-on-surface-variant">Nessuna azione pianificata</p>
             )}
-            <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="mt-4 pt-4 border-t border-gray-border">
               <Link href={`/contacts/${id}/edit`}>
-                <Button variant="ghost" size="sm" className="w-full justify-center">Aggiorna azione</Button>
+                <Button variant="ghost" size="sm" className="w-full justify-center">
+                  Aggiorna azione
+                </Button>
               </Link>
             </div>
           </div>

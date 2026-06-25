@@ -35,15 +35,15 @@ export default async function DashboardPage() {
     return (
       <div>
         <Header title="Dashboard" />
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 max-w-xl">
-          <p className="text-sm font-semibold text-amber-800 mb-1">Tabella non trovata su Supabase</p>
-          <p className="text-sm text-amber-700 mb-3">
-            Devi creare la tabella <code className="font-mono bg-amber-100 px-1 rounded">contacts</code> nel tuo progetto Supabase.
+        <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6 max-w-xl">
+          <p className="text-sm font-semibold text-on-surface mb-1">Tabella non trovata su Supabase</p>
+          <p className="text-sm text-on-surface-variant mb-3">
+            Devi creare la tabella <code className="font-mono bg-surface-container px-1 rounded">contacts</code> nel tuo progetto Supabase.
           </p>
-          <ol className="text-sm text-amber-700 space-y-1 list-decimal list-inside">
+          <ol className="text-sm text-on-surface-variant space-y-1 list-decimal list-inside">
             <li>Apri il tuo progetto su supabase.com</li>
             <li>Vai su <strong>SQL Editor → New query</strong></li>
-            <li>Incolla il contenuto di <code className="font-mono bg-amber-100 px-1 rounded">supabase/schema.sql</code></li>
+            <li>Incolla il contenuto di <code className="font-mono bg-surface-container px-1 rounded">supabase/schema.sql</code></li>
             <li>Clicca <strong>Run</strong> e ricarica questa pagina</li>
           </ol>
         </div>
@@ -55,20 +55,44 @@ export default async function DashboardPage() {
     <div>
       <Header
         title="Dashboard"
-        subtitle={`Buongiorno! Oggi è ${today.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' })}`}
+        subtitle={`Oggi è ${today.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' })}`}
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <StatCard label="Contatti attivi" value={active.length} />
-        <StatCard label="Lead" value={leads.length} color="text-blue-600" />
-        <StatCard label="Clienti" value={customers.length} color="text-purple-600" />
-        <StatCard label="Follow-up scaduti" value={overdueCount} color={overdueCount > 0 ? 'text-red-600' : 'text-gray-900'} />
+        <StatCard
+          label="Contatti attivi"
+          value={active.length}
+          icon="contact_page"
+          iconBg="bg-primary-fixed"
+          iconColor="text-primary"
+        />
+        <StatCard
+          label="Lead"
+          value={leads.length}
+          icon="rocket"
+          iconBg="bg-secondary-fixed"
+          iconColor="text-secondary"
+        />
+        <StatCard
+          label="Clienti"
+          value={customers.length}
+          icon="verified"
+          iconBg="bg-tertiary-fixed"
+          iconColor="text-tertiary"
+        />
+        <StatCard
+          label="Follow-up scaduti"
+          value={overdueCount}
+          icon="event_busy"
+          iconBg="bg-red-100"
+          iconColor="text-red-600"
+          valueColor={overdueCount > 0 ? 'text-danger' : 'text-on-surface'}
+          badge={overdueCount > 0 ? 'Urgenti' : undefined}
+          badgeColor="bg-error-container text-on-error-container"
+        />
       </div>
 
-      <div>
-        <h2 className="text-base font-semibold text-gray-700 mb-3">Prossimi follow-up</h2>
-        <FollowUpList contacts={upcoming} />
-      </div>
+      <FollowUpList contacts={upcoming} />
     </div>
   )
 }

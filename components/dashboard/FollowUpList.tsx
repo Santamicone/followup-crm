@@ -17,48 +17,85 @@ function formatDate(dateStr: string): string {
   return `Fra ${diff}g`
 }
 
-function isUrgent(dateStr: string): boolean {
+function isOverdue(dateStr: string): boolean {
   const date = new Date(dateStr)
   const today = new Date()
   today.setHours(0, 0, 0, 0)
-  const diff = Math.floor((date.getTime() - today.getTime()) / 86400000)
-  return diff <= 1
+  return date < today
 }
+
+function getInitials(name: string): string {
+  return name.split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase()
+}
+
+const AVATAR_COLORS = [
+  'bg-primary-fixed text-primary',
+  'bg-secondary-fixed text-secondary',
+  'bg-tertiary-fixed text-tertiary',
+  'bg-green-100 text-green-700',
+]
 
 export default function FollowUpList({ contacts }: FollowUpListProps) {
   if (contacts.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-        <p className="text-gray-400 text-sm">Nessun follow-up in programma</p>
+      <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-8 text-center">
+        <span className="material-symbols-outlined text-[40px] text-on-surface-variant mb-3 block">event_available</span>
+        <p className="text-sm text-on-surface-variant">Nessun follow-up in programma</p>
       </div>
     )
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
-      {contacts.map((contact) => (
-        <Link key={contact.id} href={`/contacts/${contact.id}`} className="flex items-start gap-4 px-5 py-4 hover:bg-gray-50 transition-colors">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <p className="text-sm font-semibold text-gray-900 truncate">{contact.name}</p>
-              <Badge status={contact.status} />
-            </div>
-            {contact.company && <p className="text-xs text-gray-400 mt-0.5">{contact.company}</p>}
-            {contact.next_action && (
-              <p className="text-xs text-gray-600 mt-1 truncate">{contact.next_action}</p>
-            )}
-          </div>
-          {contact.next_action_date && (
-            <span className={`shrink-0 text-xs font-semibold px-2 py-1 rounded-full ${
-              isUrgent(contact.next_action_date)
-                ? 'bg-red-100 text-red-700'
-                : 'bg-gray-100 text-gray-600'
-            }`}>
-              {formatDate(contact.next_action_date)}
-            </span>
-          )}
+    <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border overflow-hidden">
+      <div className="px-6 py-5 border-b border-gray-border flex items-center justify-between">
+        <h4 className="text-base font-semibold text-on-surface">Prossimi follow-up</h4>
+        <Link href="/contacts" className="text-sm font-semibold text-primary hover:underline">
+          Vedi tutti
         </Link>
-      ))}
+      </div>
+      <div className="divide-y divide-gray-border">
+        {contacts.map((contact, i) => (
+          <Link
+            key={contact.id}
+            href={`/contacts/${contact.id}`}
+            className="flex items-center gap-4 px-6 py-4 hover:bg-surface-container-low transition-colors"
+          >
+            {/* Avatar */}
+            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${AVATAR_COLORS[i % AVATAR_COLORS.length]}`}>
+              {getInitials(contact.name)}
+            </div>
+
+            {/* Name + company */}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-on-surface truncate">{contact.name}</p>
+              {contact.company && (
+                <p className="text-xs text-on-surface-variant">{contact.company}</p>
+              )}
+            </div>
+
+            {/* Status */}
+            <Badge status={contact.status} />
+
+            {/* Action */}
+            {contact.next_action && (
+              <p className="text-xs text-on-surface-variant hidden md:block max-w-[200px] truncate">
+                {contact.next_action}
+              </p>
+            )}
+
+            {/* Date chip */}
+            {contact.next_action_date && (
+              <span className={`shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ${
+                isOverdue(contact.next_action_date)
+                  ? 'bg-red-100 text-red-700'
+                  : 'bg-surface-container text-primary'
+              }`}>
+                {formatDate(contact.next_action_date)}
+              </span>
+            )}
+          </Link>
+        ))}
+      </div>
     </div>
   )
 }
