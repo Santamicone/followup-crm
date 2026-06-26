@@ -8,6 +8,7 @@ import Header from '@/components/layout/Header'
 import Button from '@/components/ui/Button'
 import ContactCard from '@/components/contacts/ContactCard'
 import ContactFilters from '@/components/contacts/ContactFilters'
+import ExportButtons from '@/components/contacts/ExportButtons'
 
 export default function ContactsPage() {
   const [allContacts, setAllContacts] = useState<Contact[]>([])
@@ -28,8 +29,11 @@ export default function ContactsPage() {
       const q = search.toLowerCase()
       return (
         c.name.toLowerCase().includes(q) ||
+        (c.role ?? '').toLowerCase().includes(q) ||
+        (c.entity ?? '').toLowerCase().includes(q) ||
         (c.company ?? '').toLowerCase().includes(q) ||
-        (c.email ?? '').toLowerCase().includes(q)
+        (c.email ?? '').toLowerCase().includes(q) ||
+        (c.city ?? '').toLowerCase().includes(q)
       )
     }
     return true
@@ -38,12 +42,15 @@ export default function ContactsPage() {
   return (
     <div>
       <Header
-        title="Contatti"
+        title="Stakeholder"
         subtitle={loading ? 'Caricamento…' : `${filtered.length} contatti`}
         actions={
-          <Link href="/contacts/new">
-            <Button>+ Nuovo contatto</Button>
-          </Link>
+          <div className="flex gap-2 items-center">
+            {!loading && <ExportButtons contacts={filtered} />}
+            <Link href="/contacts/new">
+              <Button>+ Nuovo contatto</Button>
+            </Link>
+          </div>
         }
       />
 

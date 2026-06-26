@@ -28,21 +28,26 @@ export default function ContactCard({ contact }: ContactCardProps) {
             <p className="text-sm font-semibold text-on-surface">{contact.name}</p>
             <Badge status={contact.status} />
           </div>
-          {contact.company && (
-            <p className="text-xs text-on-surface-variant mt-0.5">{contact.company}</p>
+          {(contact.role || contact.entity) && (
+            <p className="text-xs text-on-surface-variant mt-0.5">
+              {[contact.role, contact.entity].filter(Boolean).join(' · ')}
+            </p>
+          )}
+          {contact.city && (
+            <p className="text-xs text-on-surface-variant">{contact.city}</p>
           )}
           {contact.email && (
             <p className="text-xs text-on-surface-variant mt-1">{contact.email}</p>
           )}
-          {contact.tags && contact.tags.length > 0 && (
+          {contact.skills && contact.skills.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
-              {contact.tags.slice(0, 3).map((tag) => (
-                <span key={tag} className="text-xs bg-surface-container text-primary px-2 py-0.5 rounded-full font-medium">
-                  {tag}
+              {contact.skills.slice(0, 3).map((s) => (
+                <span key={s} className="text-xs bg-surface-container text-primary px-2 py-0.5 rounded-full font-medium">
+                  {s}
                 </span>
               ))}
-              {contact.tags.length > 3 && (
-                <span className="text-xs text-on-surface-variant">+{contact.tags.length - 3}</span>
+              {contact.skills.length > 3 && (
+                <span className="text-xs text-on-surface-variant">+{contact.skills.length - 3}</span>
               )}
             </div>
           )}

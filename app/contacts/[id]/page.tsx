@@ -3,23 +3,26 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { getContact, archiveContact } from '@/lib/supabase'
-import { Contact } from '@/lib/types'
+import { getContact, archiveContact, getActions } from '@/lib/supabase'
+import { Contact, Action } from '@/lib/types'
 import Header from '@/components/layout/Header'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import Modal from '@/components/ui/Modal'
+import ActionsPanel from '@/components/contacts/ActionsPanel'
 
 export default function ContactDetailPage() {
   const { id } = useParams<{ id: string }>()
   const router = useRouter()
   const [contact, setContact] = useState<Contact | undefined>()
+  const [actions, setActions] = useState<Action[]>([])
   const [loading, setLoading] = useState(true)
   const [showArchiveModal, setShowArchiveModal] = useState(false)
 
   useEffect(() => {
-    getContact(id).then((data) => {
-      setContact(data)
+    Promise.all([getContact(id), getActions(id)]).then(([c, a]) => {
+      setContact(c)
+      setActions(a)
       setLoading(false)
     })
   }, [id])
@@ -30,7 +33,7 @@ export default function ContactDetailPage() {
     setShowArchiveModal(false)
   }
 
-  const formatDate = (d?: string) =>
+  const fmt = (d?: string) =>
     d ? new Date(d).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) : '—'
 
   if (loading) {
@@ -51,11 +54,21 @@ export default function ContactDetailPage() {
 
   const initials = contact.name.split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase()
 
+  const infoRows = [
+    { label: 'Email', value: contact.email, icon: 'mail' },
+    { label: 'Telefono', value: contact.phone, icon: 'call' },
+    { label: 'Città', value: contact.city, icon: 'location_on' },
+    { label: 'Ruolo', value: contact.role, icon: 'badge' },
+    { label: 'Entità', value: contact.entity, icon: 'group' },
+    { label: 'Azienda', value: contact.company, icon: 'business' },
+    { label: 'Aggiunto', value: fmt(contact.created_at), icon: 'calendar_today' },
+  ]
+
   return (
     <div>
       <Header
         title={contact.name}
-        subtitle={contact.company || undefined}
+        subtitle={[contact.role, contact.entity].filter(Boolean).join(' · ') || contact.company || undefined}
         actions={
           <div className="flex gap-2">
             <Link href={`/contacts/${id}/edit`}>
@@ -74,9 +87,10 @@ export default function ContactDetailPage() {
         }
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-4xl">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-5xl">
+        {/* Colonna sinistra */}
         <div className="lg:col-span-2 space-y-4">
-          {/* Avatar + Info header */}
+          {/* Info */}
           <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-14 h-14 rounded-full bg-primary-fixed text-primary flex items-center justify-center text-xl font-bold">
@@ -84,57 +98,76 @@ export default function ContactDetailPage() {
               </div>
               <div>
                 <h2 className="text-lg font-bold text-on-surface">{contact.name}</h2>
-                {contact.company && <p className="text-sm text-on-surface-variant">{contact.company}</p>}
+                {contact.entity && <p className="text-sm text-on-surface-variant">{contact.entity}</p>}
                 <div className="mt-1"><Badge status={contact.status} /></div>
               </div>
             </div>
 
             <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-4">Informazioni</h3>
             <dl className="space-y-3">
-              {[
-                { label: 'Email', value: contact.email, icon: 'mail' },
-                { label: 'Telefono', value: contact.phone, icon: 'call' },
-                { label: 'Azienda', value: contact.company, icon: 'business' },
-                { label: 'Creato il', value: formatDate(contact.created_at), icon: 'calendar_today' },
-              ].map(({ label, value, icon }) => (
+              {infoRows.map(({ label, value, icon }) => value ? (
                 <div key={label} className="flex items-center gap-3">
                   <span className="material-symbols-outlined text-[18px] text-on-surface-variant w-5 shrink-0">{icon}</span>
                   <dt className="text-sm text-on-surface-variant w-24 shrink-0">{label}</dt>
-                  <dd className="text-sm text-on-surface">{value || '—'}</dd>
+                  <dd className="text-sm text-on-surface">{value}</dd>
                 </div>
-              ))}
+              ) : null)}
             </dl>
           </div>
 
-          {contact.tags && contact.tags.length > 0 && (
+          {/* Competenze */}
+          {contact.skills && contact.skills.length > 0 && (
             <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6">
-              <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">Tag</h3>
+              <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">Competenze</h3>
               <div className="flex flex-wrap gap-2">
-                {contact.tags.map((tag) => (
-                  <span key={tag} className="text-sm bg-surface-container text-primary px-3 py-1 rounded-full font-medium">
-                    {tag}
-                  </span>
+                {contact.skills.map((s) => (
+                  <span key={s} className="text-sm bg-surface-container text-primary px-3 py-1 rounded-full font-medium">{s}</span>
                 ))}
               </div>
             </div>
           )}
 
+          {/* Perché utile */}
+          {contact.why_useful && (
+            <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6">
+              <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">Perché può essere utile</h3>
+              <p className="text-sm text-on-surface whitespace-pre-wrap leading-relaxed">{contact.why_useful}</p>
+            </div>
+          )}
+
+          {/* Note */}
           {contact.notes && (
             <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6">
               <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">Note</h3>
               <p className="text-sm text-on-surface whitespace-pre-wrap leading-relaxed">{contact.notes}</p>
             </div>
           )}
+
+          {/* Tag */}
+          {contact.tags && contact.tags.length > 0 && (
+            <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6">
+              <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">Tag</h3>
+              <div className="flex flex-wrap gap-2">
+                {contact.tags.map((tag) => (
+                  <span key={tag} className="text-sm bg-surface-container text-primary px-3 py-1 rounded-full font-medium">{tag}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Storico azioni */}
+          <ActionsPanel contactId={id} initial={actions} />
         </div>
 
-        <div>
+        {/* Colonna destra */}
+        <div className="space-y-4">
           <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6">
             <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-4">Prossima azione</h3>
             {contact.next_action ? (
               <>
                 <p className="text-sm text-on-surface font-medium">{contact.next_action}</p>
                 {contact.next_action_date && (
-                  <p className="text-xs text-primary mt-1 font-semibold">{formatDate(contact.next_action_date)}</p>
+                  <p className="text-xs text-primary mt-1 font-semibold">{fmt(contact.next_action_date)}</p>
                 )}
               </>
             ) : (
@@ -154,7 +187,7 @@ export default function ContactDetailPage() {
       <Modal
         open={showArchiveModal}
         title="Archivia contatto"
-        description={`Sei sicuro di voler archiviare "${contact.name}"? Potrai sempre riattivarlo in seguito modificando lo stato.`}
+        description={`Sei sicuro di voler archiviare "${contact.name}"?`}
         confirmLabel="Archivia"
         onConfirm={handleArchive}
         onCancel={() => setShowArchiveModal(false)}

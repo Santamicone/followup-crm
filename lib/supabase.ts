@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { Contact } from './types'
+import { Contact, Action } from './types'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -36,7 +36,7 @@ export async function createContact(
 ): Promise<Contact> {
   const { data, error } = await supabase
     .from('contacts')
-    .insert(sanitize(contact))
+    .insert(sanitize(contact as Record<string, unknown>))
     .select()
     .single()
   if (error) throw error
@@ -49,7 +49,7 @@ export async function updateContact(
 ): Promise<Contact | null> {
   const { data, error } = await supabase
     .from('contacts')
-    .update(sanitize(contact))
+    .update(sanitize(contact as Record<string, unknown>))
     .eq('id', id)
     .select()
     .single()
@@ -59,4 +59,43 @@ export async function updateContact(
 
 export async function archiveContact(id: string): Promise<Contact | null> {
   return updateContact(id, { status: 'archived' })
+}
+
+// Actions
+export async function getActions(contactId: string): Promise<Action[]> {
+  const { data, error } = await supabase
+    .from('actions')
+    .select('*')
+    .eq('contact_id', contactId)
+    .order('created_at', { ascending: false })
+  if (error) throw error
+  return data as Action[]
+}
+
+export async function createAction(
+  action: Omit<Action, 'id' | 'created_at'>
+): Promise<Action> {
+  const { data, error } = await supabase
+    .from('actions')
+    .insert(sanitize(action as Record<string, unknown>))
+    .select()
+    .single()
+  if (error) throw error
+  return data as Action
+}
+
+export async function toggleAction(id: string, done: boolean): Promise<Action | null> {
+  const { data, error } = await supabase
+    .from('actions')
+    .update({ done, done_at: done ? new Date().toISOString() : null })
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return data as Action
+}
+
+export async function deleteAction(id: string): Promise<void> {
+  const { error } = await supabase.from('actions').delete().eq('id', id)
+  if (error) throw error
 }

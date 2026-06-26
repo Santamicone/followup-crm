@@ -3,8 +3,15 @@ export type ContactStatus = 'active' | 'archived' | 'lead' | 'customer'
 export interface Contact {
   id: string
   name: string
+  first_name?: string
+  last_name?: string
   email?: string
   phone?: string
+  city?: string
+  role?: string
+  skills?: string[]
+  entity?: string
+  why_useful?: string
   company?: string
   status: ContactStatus
   tags?: string[]
@@ -13,6 +20,16 @@ export interface Contact {
   next_action_date?: string
   created_at: string
   updated_at: string
+}
+
+export interface Action {
+  id: string
+  contact_id: string
+  title: string
+  description?: string
+  done: boolean
+  done_at?: string
+  created_at: string
 }
 
 export const STATUS_LABELS: Record<ContactStatus, string> = {
