@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 
 const navItems = [
@@ -15,11 +16,19 @@ export default function Sidebar() {
   return (
     <aside className="w-64 shrink-0 bg-surface-card border-r border-gray-border flex flex-col h-screen sticky top-0">
       {/* Brand */}
-      <div className="px-6 py-6 flex items-center gap-3">
-        <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-          <span className="material-symbols-outlined text-white text-[20px]">rocket_launch</span>
+      <div className="px-6 py-5 flex flex-col gap-3">
+        <Image
+          src="/testata.png"
+          alt="Vieni a correre"
+          width={200}
+          height={60}
+          className="w-full h-auto object-contain"
+          priority
+        />
+        <div>
+          <h1 className="text-sm font-bold text-primary leading-tight">Vieni a correre. Running service</h1>
+          <p className="text-xs text-on-surface-variant font-medium">CRM</p>
         </div>
-        <h1 className="text-lg font-bold text-primary tracking-tight">FollowUp CRM</h1>
       </div>
 
       {/* Nav */}
@@ -50,7 +59,7 @@ export default function Sidebar() {
 
       {/* Footer */}
       <div className="p-4 border-t border-gray-border">
-        <p className="text-xs text-on-surface-variant px-2">FollowUp CRM v0.1</p>
+        <p className="text-xs text-on-surface-variant px-2">Vieni a correre. Running service CRM v0.1</p>
       </div>
     </aside>
   )
