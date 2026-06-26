@@ -6,10 +6,10 @@ interface BadgeProps {
 }
 
 const STATUS_STYLES: Record<ContactStatus, string> = {
-  active: 'bg-green-100 text-green-700',
-  lead: 'bg-blue-100 text-blue-700',
-  customer: 'bg-purple-100 text-purple-700',
-  archived: 'bg-gray-100 text-gray-500',
+  to_contact: 'bg-blue-100 text-blue-700',
+  contacted: 'bg-yellow-100 text-yellow-700',
+  involved: 'bg-green-100 text-green-700',
+  not_interested: 'bg-gray-100 text-gray-500',
 }
 
 export default function Badge({ status, className = '' }: BadgeProps) {

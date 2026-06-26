@@ -1,23 +1,20 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { getContact, archiveContact, getActions } from '@/lib/supabase'
+import { getContact, getActions } from '@/lib/supabase'
 import { Contact, Action } from '@/lib/types'
 import Header from '@/components/layout/Header'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
-import Modal from '@/components/ui/Modal'
 import ActionsPanel from '@/components/contacts/ActionsPanel'
 
 export default function ContactDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const router = useRouter()
   const [contact, setContact] = useState<Contact | undefined>()
   const [actions, setActions] = useState<Action[]>([])
   const [loading, setLoading] = useState(true)
-  const [showArchiveModal, setShowArchiveModal] = useState(false)
 
   useEffect(() => {
     Promise.all([getContact(id), getActions(id)]).then(([c, a]) => {
@@ -26,12 +23,6 @@ export default function ContactDetailPage() {
       setLoading(false)
     })
   }, [id])
-
-  async function handleArchive() {
-    const updated = await archiveContact(id)
-    if (updated) setContact(updated)
-    setShowArchiveModal(false)
-  }
 
   const fmt = (d?: string) =>
     d ? new Date(d).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) : '—'
@@ -70,20 +61,12 @@ export default function ContactDetailPage() {
         title={contact.name}
         subtitle={[contact.role, contact.entity].filter(Boolean).join(' · ') || contact.company || undefined}
         actions={
-          <div className="flex gap-2">
-            <Link href={`/contacts/${id}/edit`}>
-              <Button variant="secondary">
-                <span className="material-symbols-outlined text-[16px]">edit</span>
-                Modifica
-              </Button>
-            </Link>
-            {contact.status !== 'archived' && (
-              <Button variant="danger" onClick={() => setShowArchiveModal(true)}>
-                <span className="material-symbols-outlined text-[16px]">archive</span>
-                Archivia
-              </Button>
-            )}
-          </div>
+          <Link href={`/contacts/${id}/edit`}>
+            <Button variant="secondary">
+              <span className="material-symbols-outlined text-[16px]">edit</span>
+              Modifica
+            </Button>
+          </Link>
         }
       />
 
@@ -183,16 +166,6 @@ export default function ContactDetailPage() {
           </div>
         </div>
       </div>
-
-      <Modal
-        open={showArchiveModal}
-        title="Archivia contatto"
-        description={`Sei sicuro di voler archiviare "${contact.name}"?`}
-        confirmLabel="Archivia"
-        onConfirm={handleArchive}
-        onCancel={() => setShowArchiveModal(false)}
-        danger
-      />
     </div>
   )
 }

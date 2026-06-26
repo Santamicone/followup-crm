@@ -17,9 +17,9 @@ export default async function DashboardPage() {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
-  const active = contacts.filter((c) => c.status !== 'archived')
-  const leads = contacts.filter((c) => c.status === 'lead')
-  const customers = contacts.filter((c) => c.status === 'customer')
+  const active = contacts.filter((c) => c.status !== 'not_interested')
+  const contacted = contacts.filter((c) => c.status === 'contacted')
+  const involved = contacts.filter((c) => c.status === 'involved')
 
   const upcoming = active
     .filter((c) => c.next_action_date)
@@ -67,16 +67,16 @@ export default async function DashboardPage() {
           iconColor="text-primary"
         />
         <StatCard
-          label="Lead"
-          value={leads.length}
-          icon="rocket"
+          label="Contattati"
+          value={contacted.length}
+          icon="mark_email_read"
           iconBg="bg-secondary-fixed"
           iconColor="text-secondary"
         />
         <StatCard
-          label="Clienti"
-          value={customers.length}
-          icon="verified"
+          label="Coinvolti"
+          value={involved.length}
+          icon="handshake"
           iconBg="bg-tertiary-fixed"
           iconColor="text-tertiary"
         />

@@ -2,7 +2,7 @@
 
 import { ContactStatus, STATUS_LABELS } from '@/lib/types'
 
-const ALL_STATUSES: (ContactStatus | 'all')[] = ['all', 'active', 'lead', 'customer', 'archived']
+const ALL_STATUSES: (ContactStatus | 'all')[] = ['all', 'to_contact', 'contacted', 'involved', 'not_interested']
 
 interface ContactFiltersProps {
   current: ContactStatus | 'all'
@@ -22,7 +22,7 @@ export default function ContactFilters({ current, search, onStatusChange, onSear
           type="text"
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Cerca per nome, azienda, email..."
+          placeholder="Cerca per nome, ruolo, entità, email..."
           className="w-full pl-10 pr-4 py-2.5 text-sm bg-surface-container-low border border-gray-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
         />
       </div>

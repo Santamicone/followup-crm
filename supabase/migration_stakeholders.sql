@@ -1,5 +1,12 @@
--- Migration: stakeholder fields + actions table
+-- Migration: stakeholder fields + actions table + new status values
 -- Eseguire nel SQL Editor di Supabase
+
+-- 0. Aggiorna il check constraint sullo status
+alter table contacts drop constraint if exists contacts_status_check;
+alter table contacts
+  alter column status set default 'to_contact',
+  add constraint contacts_status_check
+    check (status in ('to_contact', 'contacted', 'involved', 'not_interested'));
 
 -- 1. Nuovi campi sulla tabella contacts
 alter table contacts

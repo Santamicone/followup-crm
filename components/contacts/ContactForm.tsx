@@ -7,7 +7,7 @@ import { createContact, updateContact } from '@/lib/supabase'
 import Button from '@/components/ui/Button'
 import TagInput from '@/components/ui/TagInput'
 
-const STATUSES: ContactStatus[] = ['active', 'lead', 'customer', 'archived']
+const STATUSES: ContactStatus[] = ['to_contact', 'contacted', 'involved', 'not_interested']
 
 interface ContactFormProps {
   contact?: Contact
@@ -42,7 +42,7 @@ export default function ContactForm({ contact }: ContactFormProps) {
     entity: contact?.entity ?? '',
     why_useful: contact?.why_useful ?? '',
     company: contact?.company ?? '',
-    status: (contact?.status ?? 'active') as ContactStatus,
+    status: (contact?.status ?? 'to_contact') as ContactStatus,
     notes: contact?.notes ?? '',
     next_action: contact?.next_action ?? '',
     next_action_date: contact?.next_action_date ?? '',

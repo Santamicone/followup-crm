@@ -7,8 +7,8 @@ create table if not exists contacts (
   email text,
   phone text,
   company text,
-  status text not null default 'active'
-    check (status in ('active', 'archived', 'lead', 'customer')),
+  status text not null default 'to_contact'
+    check (status in ('to_contact', 'contacted', 'involved', 'not_interested')),
   notes text,
   tags text[] default '{}',
   next_action text,

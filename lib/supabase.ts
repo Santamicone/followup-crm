@@ -58,7 +58,7 @@ export async function updateContact(
 }
 
 export async function archiveContact(id: string): Promise<Contact | null> {
-  return updateContact(id, { status: 'archived' })
+  return updateContact(id, { status: 'not_interested' })
 }
 
 // Actions

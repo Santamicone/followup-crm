@@ -1,4 +1,4 @@
-export type ContactStatus = 'active' | 'archived' | 'lead' | 'customer'
+export type ContactStatus = 'to_contact' | 'contacted' | 'involved' | 'not_interested'
 
 export interface Contact {
   id: string
@@ -33,15 +33,15 @@ export interface Action {
 }
 
 export const STATUS_LABELS: Record<ContactStatus, string> = {
-  active: 'Attivo',
-  archived: 'Archiviato',
-  lead: 'Lead',
-  customer: 'Cliente',
+  to_contact: 'Da contattare',
+  contacted: 'Contattato',
+  involved: 'Coinvolto',
+  not_interested: 'Non interessato',
 }
 
 export const STATUS_COLORS: Record<ContactStatus, string> = {
-  active: 'bg-green-100 text-green-800',
-  archived: 'bg-gray-100 text-gray-600',
-  lead: 'bg-blue-100 text-blue-800',
-  customer: 'bg-purple-100 text-purple-800',
+  to_contact: 'bg-blue-100 text-blue-800',
+  contacted: 'bg-yellow-100 text-yellow-800',
+  involved: 'bg-green-100 text-green-800',
+  not_interested: 'bg-gray-100 text-gray-500',
 }
