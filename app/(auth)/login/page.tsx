@@ -33,18 +33,14 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-8">
           {/* Brand */}
-          <div className="flex flex-col items-center gap-3 mb-8">
+          <div className="flex flex-col items-center mb-8">
             <Image
-              src="/tesatata_quadrata.png"
-              alt="Vieni a correre"
-              width={72}
-              height={72}
-              className="rounded-2xl"
+              src="/logo.png"
+              alt="Vieni a correre. Running CRM"
+              width={200}
+              height={200}
+              className="w-48 h-auto object-contain"
             />
-            <div className="text-center">
-              <h1 className="text-lg font-extrabold text-on-surface tracking-tight">Vieni a correre.</h1>
-              <p className="text-xs font-semibold text-primary uppercase tracking-widest mt-0.5">Running CRM</p>
-            </div>
           </div>
 
           {/* Form */}

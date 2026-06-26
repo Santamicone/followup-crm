@@ -59,19 +59,15 @@ export default function Sidebar() {
   }, [pathname])
 
   const brand = (
-    <div className="px-5 py-5 flex items-center gap-3">
+    <div className="px-5 py-4">
       <Image
-        src="/tesatata_quadrata.png"
-        alt="Vieni a correre"
-        width={52}
-        height={52}
-        className="rounded-xl shrink-0 object-cover"
+        src="/logo.png"
+        alt="Vieni a correre. Running CRM"
+        width={180}
+        height={180}
+        className="w-full h-auto object-contain"
         priority
       />
-      <div className="min-w-0">
-        <h1 className="text-base font-extrabold text-on-surface leading-tight tracking-tight">Vieni a correre.</h1>
-        <p className="text-xs font-semibold text-primary uppercase tracking-widest mt-0.5">Running CRM</p>
-      </div>
     </div>
   )
 
@@ -106,7 +102,7 @@ export default function Sidebar() {
         >
           <span className="material-symbols-outlined text-[24px]">menu</span>
         </button>
-        <span className="text-sm font-extrabold text-on-surface tracking-tight">Vieni a correre. <span className="text-primary font-semibold text-xs uppercase tracking-widest">CRM</span></span>
+        <Image src="/logo.png" alt="Vieni a correre. Running CRM" width={120} height={40} className="h-8 w-auto object-contain" />
       </div>
 
       {/* Overlay */}
