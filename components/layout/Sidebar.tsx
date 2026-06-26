@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
 const navItems = [
@@ -45,6 +45,13 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 export default function Sidebar() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
+
+  async function handleLogout() {
+    await fetch('/api/logout', { method: 'POST' })
+    router.push('/login')
+    router.refresh()
+  }
 
   // Chiudi il drawer ad ogni cambio di route
   useEffect(() => {
@@ -69,8 +76,15 @@ export default function Sidebar() {
   )
 
   const footer = (
-    <div className="p-4 border-t border-gray-border">
-      <p className="text-xs text-on-surface-variant px-2">Vieni a correre. Running service CRM v0.1</p>
+    <div className="p-4 border-t border-gray-border space-y-2">
+      <button
+        onClick={handleLogout}
+        className="flex items-center gap-2 w-full px-2 py-2 rounded-lg text-xs font-medium text-on-surface-variant hover:bg-surface-container-low transition-colors"
+      >
+        <span className="material-symbols-outlined text-[18px]">logout</span>
+        Esci
+      </button>
+      <p className="text-xs text-on-surface-variant px-2">CRM v0.1</p>
     </div>
   )
 
