@@ -32,12 +32,6 @@ create table if not exists actions (
 create index if not exists actions_contact_id_idx on actions (contact_id);
 create index if not exists actions_created_at_idx on actions (created_at);
 
--- Trigger updated_at per actions (opzionale, ma coerente)
-drop trigger if exists actions_contact_updated_at on actions;
-create trigger actions_contact_updated_at
-  after insert or update or delete on actions
-  for each row execute function update_updated_at();
-
 -- RLS per actions
 alter table actions enable row level security;
 
