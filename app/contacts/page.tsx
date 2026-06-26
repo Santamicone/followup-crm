@@ -7,6 +7,7 @@ import { Contact, ContactStatus } from '@/lib/types'
 import Header from '@/components/layout/Header'
 import Button from '@/components/ui/Button'
 import ContactCard from '@/components/contacts/ContactCard'
+import SkeletonCard from '@/components/contacts/SkeletonCard'
 import ContactFilters from '@/components/contacts/ContactFilters'
 import ExportButtons from '@/components/contacts/ExportButtons'
 
@@ -62,8 +63,8 @@ export default function ContactsPage() {
       />
 
       {loading ? (
-        <div className="text-center py-16 text-gray-400">
-          <p>Caricamento contatti…</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-16 text-gray-400">

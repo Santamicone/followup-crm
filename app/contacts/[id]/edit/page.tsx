@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { getContact } from '@/lib/supabase'
 import { Contact } from '@/lib/types'
 import Header from '@/components/layout/Header'
+import Breadcrumb from '@/components/ui/Breadcrumb'
 import ContactForm from '@/components/contacts/ContactForm'
 
 export default function EditContactPage() {
@@ -37,6 +38,11 @@ export default function EditContactPage() {
 
   return (
     <div>
+      <Breadcrumb crumbs={[
+        { label: 'Contatti', href: '/contacts' },
+        { label: contact.name, href: `/contacts/${id}` },
+        { label: 'Modifica' },
+      ]} />
       <Header title="Modifica contatto" subtitle={contact.name} />
       <ContactForm contact={contact} />
     </div>

@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { getContact, getActions } from '@/lib/supabase'
 import { Contact, Action } from '@/lib/types'
 import Header from '@/components/layout/Header'
+import Breadcrumb from '@/components/ui/Breadcrumb'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import ActionsPanel from '@/components/contacts/ActionsPanel'
@@ -57,6 +58,7 @@ export default function ContactDetailPage() {
 
   return (
     <div>
+      <Breadcrumb crumbs={[{ label: 'Contatti', href: '/contacts' }, { label: contact.name }]} />
       <Header
         title={contact.name}
         subtitle={[contact.role, contact.entity].filter(Boolean).join(' · ') || contact.company || undefined}

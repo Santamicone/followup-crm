@@ -16,7 +16,7 @@ interface ContactFormProps {
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-sm font-medium text-on-surface-variant mb-1">
         {label}{required && ' *'}
       </label>
       {children}
@@ -24,7 +24,7 @@ function Field({ label, required, children }: { label: string; required?: boolea
   )
 }
 
-const inputCls = 'w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500'
+const inputCls = 'w-full px-3 py-2 text-sm border border-gray-border rounded-lg bg-surface-container-low text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
 
 export default function ContactForm({ contact }: ContactFormProps) {
   const router = useRouter()
@@ -32,6 +32,8 @@ export default function ContactForm({ contact }: ContactFormProps) {
 
   const [tags, setTags] = useState<string[]>(contact?.tags ?? [])
   const [skills, setSkills] = useState<string[]>(contact?.skills ?? [])
+  const hasOptionalData = !!(contact?.entity || contact?.why_useful || contact?.notes || (contact?.skills?.length ?? 0) > 0)
+  const [showOptional, setShowOptional] = useState(hasOptionalData)
   const [form, setForm] = useState({
     first_name: contact?.first_name ?? '',
     last_name: contact?.last_name ?? '',
@@ -85,8 +87,8 @@ export default function ContactForm({ contact }: ContactFormProps) {
       )}
 
       {/* Anagrafica */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
-        <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Anagrafica</h2>
+      <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6 space-y-4">
+        <h2 className="text-sm font-semibold text-on-surface-variant uppercase tracking-wide">Anagrafica</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Nome" required>
@@ -117,39 +119,59 @@ export default function ContactForm({ contact }: ContactFormProps) {
       </div>
 
       {/* Profilo */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
-        <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Profilo</h2>
+      <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6 space-y-4">
+        <h2 className="text-sm font-semibold text-on-surface-variant uppercase tracking-wide">Profilo</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Ruolo">
             <input type="text" value={form.role} onChange={(e) => set('role', e.target.value)}
               className={inputCls} placeholder="Direttore Marketing" />
           </Field>
-          <Field label="Entità di riferimento">
-            <input type="text" value={form.entity} onChange={(e) => set('entity', e.target.value)}
-              className={inputCls} placeholder="Azienda / Squadra / Gruppo" />
+          <Field label="Azienda">
+            <input type="text" value={form.company} onChange={(e) => set('company', e.target.value)}
+              className={inputCls} placeholder="Acme srl" />
           </Field>
         </div>
+      </div>
 
-        <Field label="Azienda">
-          <input type="text" value={form.company} onChange={(e) => set('company', e.target.value)}
-            className={inputCls} placeholder="Acme srl" />
-        </Field>
-
-        <Field label="Competenze">
-          <TagInput tags={skills} onChange={setSkills} />
-        </Field>
-
-        <Field label="Perché può essere utile">
-          <textarea value={form.why_useful} onChange={(e) => set('why_useful', e.target.value)}
-            rows={3} className={`${inputCls} resize-none`}
-            placeholder="Es. Ha esperienza nel settore X, conosce i decision maker di Y…" />
-        </Field>
+      {/* Dettagli opzionali — collassabili */}
+      <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border overflow-hidden">
+        <button
+          type="button"
+          onClick={() => setShowOptional((v) => !v)}
+          className="w-full flex items-center justify-between px-6 py-4 text-sm font-semibold text-on-surface-variant uppercase tracking-wide hover:bg-surface-container-low transition-colors"
+        >
+          <span>Dettagli opzionali</span>
+          <span className="material-symbols-outlined text-[20px] transition-transform duration-200" style={showOptional ? { transform: 'rotate(180deg)' } : undefined}>
+            expand_more
+          </span>
+        </button>
+        {showOptional && (
+          <div className="px-6 pb-6 space-y-4 border-t border-gray-border pt-4">
+            <Field label="Entità di riferimento">
+              <input type="text" value={form.entity} onChange={(e) => set('entity', e.target.value)}
+                className={inputCls} placeholder="Azienda / Squadra / Gruppo" />
+            </Field>
+            <Field label="Competenze">
+              <TagInput tags={skills} onChange={setSkills} />
+            </Field>
+            <Field label="Perché può essere utile">
+              <textarea value={form.why_useful} onChange={(e) => set('why_useful', e.target.value)}
+                rows={3} className={`${inputCls} resize-none`}
+                placeholder="Es. Ha esperienza nel settore X, conosce i decision maker di Y…" />
+            </Field>
+            <Field label="Note">
+              <textarea value={form.notes} onChange={(e) => set('notes', e.target.value)}
+                rows={4} className={`${inputCls} resize-none`}
+                placeholder="Annotazioni libere…" />
+            </Field>
+          </div>
+        )}
       </div>
 
       {/* Stato */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
-        <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Stato</h2>
+      <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6 space-y-4">
+        <h2 className="text-sm font-semibold text-on-surface-variant uppercase tracking-wide">Stato</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Stato">
             <select value={form.status} onChange={(e) => set('status', e.target.value)}
@@ -160,12 +182,14 @@ export default function ContactForm({ contact }: ContactFormProps) {
             </select>
           </Field>
         </div>
-        <TagInput tags={tags} onChange={setTags} />
+        <Field label="Tag">
+          <TagInput tags={tags} onChange={setTags} />
+        </Field>
       </div>
 
       {/* Follow-up */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
-        <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Prossima azione</h2>
+      <div className="bg-surface-card rounded-[24px] card-shadow border border-gray-border p-6 space-y-4">
+        <h2 className="text-sm font-semibold text-on-surface-variant uppercase tracking-wide">Prossima azione</h2>
         <Field label="Descrizione azione">
           <input type="text" value={form.next_action} onChange={(e) => set('next_action', e.target.value)}
             className={inputCls} placeholder="Es. Inviare proposta, fissare call…" />
@@ -174,14 +198,6 @@ export default function ContactForm({ contact }: ContactFormProps) {
           <input type="date" value={form.next_action_date} onChange={(e) => set('next_action_date', e.target.value)}
             className={inputCls} />
         </Field>
-      </div>
-
-      {/* Note */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
-        <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Note</h2>
-        <textarea value={form.notes} onChange={(e) => set('notes', e.target.value)}
-          rows={4} className={`${inputCls} resize-none`}
-          placeholder="Annotazioni libere…" />
       </div>
 
       <div className="flex items-center gap-3">

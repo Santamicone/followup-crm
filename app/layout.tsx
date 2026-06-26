@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="h-full flex bg-surface-bg antialiased custom-scrollbar">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+        <main className="flex-1 overflow-y-auto pt-14 lg:pt-0 p-8 custom-scrollbar">
           {children}
         </main>
       </body>
