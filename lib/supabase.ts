@@ -61,6 +61,11 @@ export async function archiveContact(id: string): Promise<Contact | null> {
   return updateContact(id, { status: 'not_interested' })
 }
 
+export async function deleteContact(id: string): Promise<void> {
+  const { error } = await supabase.from('contacts').delete().eq('id', id)
+  if (error) throw error
+}
+
 // Actions
 export async function getActions(contactId: string): Promise<Action[]> {
   const { data, error } = await supabase

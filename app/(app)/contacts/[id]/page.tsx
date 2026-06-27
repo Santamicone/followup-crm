@@ -1,21 +1,25 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { getContact, getActions } from '@/lib/supabase'
+import { getContact, getActions, deleteContact } from '@/lib/supabase'
 import { Contact, Action } from '@/lib/types'
 import Header from '@/components/layout/Header'
 import Breadcrumb from '@/components/ui/Breadcrumb'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
+import Modal from '@/components/ui/Modal'
 import ActionsPanel from '@/components/contacts/ActionsPanel'
 
 export default function ContactDetailPage() {
   const { id } = useParams<{ id: string }>()
+  const router = useRouter()
   const [contact, setContact] = useState<Contact | undefined>()
   const [actions, setActions] = useState<Action[]>([])
   const [loading, setLoading] = useState(true)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     Promise.all([getContact(id), getActions(id)]).then(([c, a]) => {
@@ -24,6 +28,17 @@ export default function ContactDetailPage() {
       setLoading(false)
     })
   }, [id])
+
+  const handleDelete = async () => {
+    setDeleting(true)
+    try {
+      await deleteContact(id)
+      router.push('/contacts')
+    } catch {
+      setDeleting(false)
+      setConfirmDelete(false)
+    }
+  }
 
   const fmt = (d?: string) =>
     d ? new Date(d).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) : '—'
@@ -63,13 +78,29 @@ export default function ContactDetailPage() {
         title={contact.name}
         subtitle={[contact.role, contact.entity].filter(Boolean).join(' · ') || contact.company || undefined}
         actions={
-          <Link href={`/contacts/${id}/edit`}>
-            <Button variant="secondary">
-              <span className="material-symbols-outlined text-[16px]">edit</span>
-              Modifica
+          <div className="flex gap-2">
+            <Link href={`/contacts/${id}/edit`}>
+              <Button variant="secondary">
+                <span className="material-symbols-outlined text-[16px]">edit</span>
+                Modifica
+              </Button>
+            </Link>
+            <Button variant="danger" onClick={() => setConfirmDelete(true)}>
+              <span className="material-symbols-outlined text-[16px]">delete</span>
+              Elimina
             </Button>
-          </Link>
+          </div>
         }
+      />
+
+      <Modal
+        open={confirmDelete}
+        title="Elimina contatto"
+        description={`Vuoi eliminare definitivamente "${contact.name}"? L'azione non può essere annullata.`}
+        confirmLabel={deleting ? 'Eliminazione…' : 'Elimina'}
+        danger
+        onConfirm={handleDelete}
+        onCancel={() => setConfirmDelete(false)}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-5xl">
