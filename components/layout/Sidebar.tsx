@@ -62,14 +62,16 @@ export default function Sidebar() {
 
   const brand = (
     <div className="px-5 py-4">
-      <Image
-        src="/logo.png"
-        alt="Vieni a correre. Running CRM"
-        width={180}
-        height={180}
-        className="w-full h-auto object-contain"
-        priority
-      />
+      <Link href="/" aria-label="Vai alla dashboard" className="block">
+        <Image
+          src="/logo.png"
+          alt="Vieni a correre. Running CRM"
+          width={180}
+          height={180}
+          className="w-full h-auto object-contain"
+          priority
+        />
+      </Link>
     </div>
   )
 
@@ -104,7 +106,9 @@ export default function Sidebar() {
         >
           <span className="material-symbols-outlined text-[24px]">menu</span>
         </button>
-        <Image src="/logo.png" alt="Vieni a correre. Running CRM" width={120} height={40} className="h-8 w-auto object-contain" />
+        <Link href="/" aria-label="Vai alla dashboard">
+          <Image src="/logo.png" alt="Vieni a correre. Running CRM" width={120} height={40} className="h-8 w-auto object-contain" />
+        </Link>
       </div>
 
       {/* Overlay */}
