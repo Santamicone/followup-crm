@@ -1,18 +1,40 @@
-import { getContacts } from '@/lib/supabase'
+import { getContacts, getIdeas, getTasks } from '@/lib/supabase'
 import Header from '@/components/layout/Header'
 import StatCard from '@/components/dashboard/StatCard'
 import FollowUpList from '@/components/dashboard/FollowUpList'
+import TaskList from '@/components/dashboard/TaskList'
 
 export const dynamic = 'force-dynamic'
 
 export default async function DashboardPage() {
   let contacts: Awaited<ReturnType<typeof getContacts>> = []
+  let ideas: Awaited<ReturnType<typeof getIdeas>> = []
+  let tasks: Awaited<ReturnType<typeof getTasks>> = []
   let dbError = false
   try {
     contacts = await getContacts()
   } catch {
     dbError = true
   }
+  // Idee e task sono opzionali: se le tabelle non esistono la dashboard
+  // contatti continua a funzionare.
+  try {
+    ideas = await getIdeas()
+  } catch {
+    ideas = []
+  }
+  try {
+    tasks = await getTasks()
+  } catch {
+    tasks = []
+  }
+
+  const openIdeas = ideas.filter((i) => i.status === 'aperta')
+  const ideasInReview = ideas.filter((i) => i.status === 'in_valutazione')
+  const openTasks = tasks.filter((t) => t.status !== 'completato')
+  const completedTasks = tasks.filter((t) => t.status === 'completato')
+
+  const topTasks = openTasks.slice(0, 6)
 
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -92,7 +114,41 @@ export default async function DashboardPage() {
         />
       </div>
 
-      <FollowUpList contacts={upcoming} />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <StatCard
+          label="Idee aperte"
+          value={openIdeas.length}
+          icon="lightbulb"
+          iconBg="bg-primary-fixed"
+          iconColor="text-primary"
+        />
+        <StatCard
+          label="Idee in valutazione"
+          value={ideasInReview.length}
+          icon="rate_review"
+          iconBg="bg-secondary-fixed"
+          iconColor="text-secondary"
+        />
+        <StatCard
+          label="Task aperti"
+          value={openTasks.length}
+          icon="checklist"
+          iconBg="bg-tertiary-fixed"
+          iconColor="text-tertiary"
+        />
+        <StatCard
+          label="Task completati"
+          value={completedTasks.length}
+          icon="task_alt"
+          iconBg="bg-green-100"
+          iconColor="text-green-700"
+        />
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-6">
+        <FollowUpList contacts={upcoming} />
+        <TaskList tasks={topTasks} />
+      </div>
     </div>
   )
 }
