@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header'
 import Button from '@/components/ui/Button'
 import PriorityStars from '@/components/ui/PriorityStars'
 import TaskForm from '@/components/tasks/TaskForm'
+import ExportButtons from '@/components/contacts/ExportButtons'
 import { getTasks, createTask, updateTask, deleteTask } from '@/lib/supabase'
 import {
   Task,
@@ -62,7 +63,12 @@ export default function TasksPage() {
       <Header
         title="Bacheca task"
         subtitle={loading ? 'Caricamento…' : `${filtered.length} task`}
-        actions={<Button onClick={openNew}>+ Nuovo task</Button>}
+        actions={
+          <div className="flex gap-2 items-center">
+            <ExportButtons defaultScope="tasks" />
+            <Button onClick={openNew}>+ Nuovo task</Button>
+          </div>
+        }
       />
 
       <div className="flex flex-wrap items-center gap-3 mb-6">

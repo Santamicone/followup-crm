@@ -2,11 +2,15 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { Contact, Task, Idea, IdeaCategory, STATUS_LABELS, TASK_STATUS_LABELS, IDEA_STATUS_LABELS } from '@/lib/types'
-import { getTasks, getIdeas, getIdeaCategories } from '@/lib/supabase'
+import { getContacts, getTasks, getIdeas, getIdeaCategories } from '@/lib/supabase'
 import Button from '@/components/ui/Button'
 
 interface ExportButtonsProps {
-  contacts: Contact[]
+  /** Lista già caricata (es. filtrata) da usare per lo scope contatti.
+   *  Se omessa, i contatti vengono caricati al momento dell'export. */
+  contacts?: Contact[]
+  /** Scope selezionato all'apertura della pagina. Default: 'contacts'. */
+  defaultScope?: Scope
 }
 
 type Scope = 'contacts' | 'tasks' | 'ideas' | 'all'
@@ -65,14 +69,15 @@ function ideasToRows(ideas: Idea[], categories: IdeaCategory[]) {
 }
 
 // ===== Caricamento dati in base allo scope =====
-async function loadData(scope: Scope, contacts: Contact[]) {
+async function loadData(scope: Scope, contacts?: Contact[]) {
   const need = (s: Scope) => scope === 'all' || scope === s
-  const [tasks, ideas, categories] = await Promise.all([
+  const [loadedContacts, tasks, ideas, categories] = await Promise.all([
+    need('contacts') ? (contacts ?? getContacts()) : Promise.resolve([] as Contact[]),
     need('tasks') ? getTasks() : Promise.resolve([] as Task[]),
     need('ideas') ? getIdeas() : Promise.resolve([] as Idea[]),
     need('ideas') ? getIdeaCategories() : Promise.resolve([] as IdeaCategory[]),
   ])
-  return { contacts, tasks, ideas, categories }
+  return { contacts: loadedContacts, tasks, ideas, categories }
 }
 
 type Sheet = { name: string; rows: Record<string, unknown>[]; columns: string[] }
@@ -107,7 +112,7 @@ function buildSheets(
   return sheets
 }
 
-async function exportExcel(scope: Scope, contacts: Contact[]) {
+async function exportExcel(scope: Scope, contacts?: Contact[]) {
   const XLSX = await import('xlsx')
   const data = await loadData(scope, contacts)
   const sheets = buildSheets(scope, data)
@@ -119,7 +124,7 @@ async function exportExcel(scope: Scope, contacts: Contact[]) {
   XLSX.writeFile(wb, `export_${scope}_${today()}.xlsx`)
 }
 
-async function exportPDF(scope: Scope, contacts: Contact[]) {
+async function exportPDF(scope: Scope, contacts?: Contact[]) {
   const { default: jsPDF } = await import('jspdf')
   const { default: autoTable } = await import('jspdf-autotable')
   const data = await loadData(scope, contacts)
@@ -149,8 +154,8 @@ async function exportPDF(scope: Scope, contacts: Contact[]) {
   doc.save(`export_${scope}_${today()}.pdf`)
 }
 
-export default function ExportButtons({ contacts }: ExportButtonsProps) {
-  const [scope, setScope] = useState<Scope>('contacts')
+export default function ExportButtons({ contacts, defaultScope = 'contacts' }: ExportButtonsProps) {
+  const [scope, setScope] = useState<Scope>(defaultScope)
   const [open, setOpen] = useState(false)
   const [busy, setBusy] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -163,7 +168,7 @@ export default function ExportButtons({ contacts }: ExportButtonsProps) {
     return () => document.removeEventListener('mousedown', onClick)
   }, [])
 
-  async function run(fn: (scope: Scope, contacts: Contact[]) => Promise<void>) {
+  async function run(fn: (scope: Scope, contacts?: Contact[]) => Promise<void>) {
     setBusy(true)
     try {
       await fn(scope, contacts)

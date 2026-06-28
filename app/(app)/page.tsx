@@ -3,6 +3,7 @@ import Header from '@/components/layout/Header'
 import StatCard from '@/components/dashboard/StatCard'
 import FollowUpList from '@/components/dashboard/FollowUpList'
 import TaskList from '@/components/dashboard/TaskList'
+import ExportButtons from '@/components/contacts/ExportButtons'
 
 export const dynamic = 'force-dynamic'
 
@@ -78,6 +79,7 @@ export default async function DashboardPage() {
       <Header
         title="Dashboard"
         subtitle={`Oggi è ${today.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' })}`}
+        actions={<ExportButtons defaultScope="all" />}
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
