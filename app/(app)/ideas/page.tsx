@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button'
 import IdeaCard from '@/components/ideas/IdeaCard'
 import IdeaForm from '@/components/ideas/IdeaForm'
 import CategoryManager from '@/components/ideas/CategoryManager'
+import ExportButtons from '@/components/contacts/ExportButtons'
 import {
   getIdeas,
   getIdeaCategories,
@@ -72,7 +73,8 @@ export default function IdeasPage() {
         title="Lavagna idee"
         subtitle={loading ? 'Caricamento…' : `${filtered.length} idee`}
         actions={
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
+            <ExportButtons defaultScope="ideas" />
             <Button variant="secondary" onClick={() => setManagerOpen(true)}>Categorie</Button>
             <Button onClick={openNew}>+ Nuova idea</Button>
           </div>
