@@ -8,6 +8,8 @@ import { useState, useEffect } from 'react'
 const navItems = [
   { href: '/', label: 'Dashboard', icon: 'dashboard' },
   { href: '/contacts', label: 'Contatti', icon: 'group' },
+  { href: '/ideas', label: 'Lavagna idee', icon: 'lightbulb' },
+  { href: '/tasks', label: 'Bacheca task', icon: 'checklist' },
 ]
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
