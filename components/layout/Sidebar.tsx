@@ -10,6 +10,12 @@ const navItems = [
   { href: '/contacts', label: 'Contatti', icon: 'group' },
   { href: '/ideas', label: 'Lavagna idee', icon: 'lightbulb' },
   { href: '/tasks', label: 'Bacheca task', icon: 'checklist' },
+  {
+    href: 'https://drive.google.com/drive/folders/1-Cq1whPJInTh9i_ESPf5hWpmkbh7GDHW?usp=sharing',
+    label: 'Risorse',
+    icon: 'folder',
+    external: true,
+  },
 ]
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
@@ -17,19 +23,19 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <nav className="flex-1 px-4 space-y-1">
-      {navItems.map(({ href, label, icon }) => {
-        const active = href === '/' ? pathname === '/' : pathname.startsWith(href) && href !== '/'
-        return (
-          <Link
-            key={href}
-            href={href}
-            onClick={onNavigate}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors duration-200 ${
-              active
-                ? 'bg-secondary-fixed text-on-secondary-fixed-variant'
-                : 'text-on-surface-variant hover:bg-surface-container-low'
-            }`}
-          >
+      {navItems.map(({ href, label, icon, external }) => {
+        const active = external
+          ? false
+          : href === '/'
+          ? pathname === '/'
+          : pathname.startsWith(href) && href !== '/'
+        const className = `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors duration-200 ${
+          active
+            ? 'bg-secondary-fixed text-on-secondary-fixed-variant'
+            : 'text-on-surface-variant hover:bg-surface-container-low'
+        }`
+        const content = (
+          <>
             <span
               className="material-symbols-outlined text-[22px]"
               style={active ? { fontVariationSettings: "'FILL' 1" } : undefined}
@@ -37,6 +43,22 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
               {icon}
             </span>
             {label}
+          </>
+        )
+        return external ? (
+          <a
+            key={href}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onNavigate}
+            className={className}
+          >
+            {content}
+          </a>
+        ) : (
+          <Link key={href} href={href} onClick={onNavigate} className={className}>
+            {content}
           </Link>
         )
       })}
