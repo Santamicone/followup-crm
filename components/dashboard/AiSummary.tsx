@@ -12,7 +12,7 @@ export default function AiSummary({ text }: AiSummaryProps) {
           <span className="material-symbols-outlined text-primary text-[22px]">auto_awesome</span>
         </div>
         <div className="min-w-0">
-          <h4 className="text-sm font-semibold text-on-surface mb-1">Riepilogo AI</h4>
+          <h4 className="text-sm font-semibold text-on-surface mb-1">Cosa c&apos;è da fare oggi</h4>
           <p className="text-sm text-on-surface-variant leading-relaxed">{text}</p>
         </div>
       </div>

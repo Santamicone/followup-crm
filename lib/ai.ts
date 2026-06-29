@@ -14,7 +14,7 @@ async function callClaude(input: DashboardSummaryInput): Promise<string | null> 
   const apiKey = process.env.ANTHROPIC_API_KEY
   if (!apiKey) return null
 
-  const prompt = `Sei l'assistente di un CRM. In base ai dati qui sotto, scrivi un riepilogo discorsivo in italiano (massimo 3 frasi, tono professionale e diretto) che evidenzi le priorità del giorno: cosa va recuperato subito, i task più urgenti e le idee da valutare. Non elencare, scrivi un paragrafo scorrevole. Se non c'è nulla di urgente, dillo in modo positivo.
+  const prompt = `Sei l'assistente di un CRM. In base ai dati qui sotto, scrivi un riepilogo discorsivo in italiano (massimo 3 frasi, tono professionale e diretto) che evidenzi le priorità del giorno: cosa va recuperato subito, i task più urgenti e le idee da valutare. Evidenzia le attività prioritarie per Marzia e per Massimo. Non elencare, scrivi un paragrafo scorrevole. Se non c'è nulla di urgente, dillo in modo positivo.
 
 Dati:
 - Follow-up scaduti: ${input.overdueCount}
