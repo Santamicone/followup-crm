@@ -35,7 +35,7 @@ export default async function DashboardPage() {
   const openTasks = tasks.filter((t) => t.status !== 'completato')
   const completedTasks = tasks.filter((t) => t.status === 'completato')
 
-  const topTasks = openTasks.slice(0, 6)
+  const topTasks = openTasks.filter((t) => t.priority === 5).slice(0, 6)
 
   const today = new Date()
   today.setHours(0, 0, 0, 0)
