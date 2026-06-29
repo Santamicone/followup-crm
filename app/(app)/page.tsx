@@ -3,7 +3,9 @@ import Header from '@/components/layout/Header'
 import StatCard from '@/components/dashboard/StatCard'
 import FollowUpList from '@/components/dashboard/FollowUpList'
 import TaskList from '@/components/dashboard/TaskList'
+import AiSummary from '@/components/dashboard/AiSummary'
 import ExportButtons from '@/components/contacts/ExportButtons'
+import { getDashboardSummary } from '@/lib/ai'
 
 export const dynamic = 'force-dynamic'
 
@@ -54,6 +56,23 @@ export default async function DashboardPage() {
     return new Date(c.next_action_date) < today
   }).length
 
+  let aiSummary: string | null = null
+  try {
+    aiSummary = await getDashboardSummary({
+      overdueCount,
+      upcoming: upcoming.map((c) => ({ name: c.name, date: c.next_action_date ?? null })),
+      topTasks: topTasks.map((t) => ({
+        description: t.description,
+        assignee: t.assignee ?? null,
+        priority: t.priority,
+      })),
+      openTasksCount: openTasks.length,
+      ideasInReview: ideasInReview.map((i) => ({ name: i.name })),
+    })
+  } catch {
+    aiSummary = null
+  }
+
   if (dbError) {
     return (
       <div>
@@ -81,6 +100,8 @@ export default async function DashboardPage() {
         subtitle={`Oggi è ${today.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' })}`}
         actions={<ExportButtons defaultScope="all" />}
       />
+
+      <AiSummary text={aiSummary} />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard

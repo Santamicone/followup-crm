@@ -41,7 +41,14 @@ Variabili d'ambiente richieste in `.env.local`:
 ```
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
+ANTHROPIC_API_KEY=         # per il box "Riepilogo AI" della dashboard
 ```
+
+`ANTHROPIC_API_KEY` è opzionale: se manca, il box "Riepilogo AI" resta nascosto e il resto della dashboard funziona normalmente.
+
+## Riepilogo AI (dashboard)
+
+`lib/ai.ts` genera un riepilogo discorsivo delle priorità (follow-up scaduti/imminenti, task prioritari, idee in valutazione) chiamando `claude-haiku-4-5` via API REST. È avvolto in `unstable_cache` con chiave = data odierna, quindi viene rigenerato **al massimo una volta al giorno** (controllo costi). Renderizzato da `components/dashboard/AiSummary.tsx`. Ogni errore (chiave mancante, API down) degrada a `null` senza rompere la pagina.
 
 ## Deploy
 
