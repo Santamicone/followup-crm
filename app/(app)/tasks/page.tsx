@@ -21,6 +21,7 @@ export default function TasksPage() {
   const [assigneeFilter, setAssigneeFilter] = useState<string>('all')
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState<Task | undefined>(undefined)
+  const [showCompleted, setShowCompleted] = useState(false)
 
   const load = useCallback(() => {
     setLoading(true)
@@ -36,6 +37,14 @@ export default function TasksPage() {
     if (assigneeFilter !== 'all' && (t.assignee ?? '') !== assigneeFilter) return false
     return true
   })
+
+  // Ordinamento per stato (aperto → in lavorazione → completato) e, a parità, per priorità decrescente
+  const STATUS_ORDER: Record<TaskStatus, number> = { aperto: 0, in_lavorazione: 1, completato: 2 }
+  const byStatusThenPriority = (a: Task, b: Task) =>
+    STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || b.priority - a.priority
+
+  const activeTasks = filtered.filter((t) => t.status !== 'completato').sort(byStatusThenPriority)
+  const completedTasks = filtered.filter((t) => t.status === 'completato').sort(byStatusThenPriority)
 
   function openNew() { setEditing(undefined); setFormOpen(true) }
   function openEdit(task: Task) { setEditing(task); setFormOpen(true) }
@@ -100,50 +109,66 @@ export default function TasksPage() {
           <p className="text-lg">Nessun task</p>
           <p className="text-sm mt-1">Aggiungi il primo task con il pulsante in alto.</p>
         </div>
-      ) : (
+      ) : statusFilter !== 'all' ? (
         <div className="bg-surface-card border border-gray-border rounded-xl divide-y divide-gray-border">
-          {filtered.map((task) => (
-            <div key={task.id} className="flex items-start gap-4 p-4">
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-on-surface whitespace-pre-wrap">{task.description}</p>
-                <div className="flex items-center flex-wrap gap-3 mt-2">
-                  {task.assignee && (
-                    <span className="inline-flex items-center gap-1 text-xs text-on-surface-variant">
-                      <span className="material-symbols-outlined text-[16px]">person</span>
-                      {task.assignee}
-                    </span>
-                  )}
-                  <PriorityStars value={task.priority} />
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 shrink-0">
-                <select
-                  value={task.status}
-                  onChange={(e) => handleStatusChange(task, e.target.value as TaskStatus)}
-                  className={`rounded-full text-xs font-semibold px-2.5 py-1 border-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/30 ${TASK_STATUS_COLORS[task.status]}`}
-                >
-                  {(Object.keys(TASK_STATUS_LABELS) as TaskStatus[]).map((s) => (
-                    <option key={s} value={s}>{TASK_STATUS_LABELS[s]}</option>
-                  ))}
-                </select>
-                <button
-                  onClick={() => openEdit(task)}
-                  className="p-1 rounded-lg text-gray-400 hover:text-primary hover:bg-surface-container-low transition-colors"
-                  aria-label="Modifica"
-                >
-                  <span className="material-symbols-outlined text-[20px]">edit</span>
-                </button>
-                <button
-                  onClick={() => handleDelete(task.id)}
-                  className="p-1 rounded-lg text-gray-400 hover:text-danger hover:bg-red-50 transition-colors"
-                  aria-label="Elimina"
-                >
-                  <span className="material-symbols-outlined text-[20px]">delete</span>
-                </button>
-              </div>
-            </div>
+          {filtered.sort(byStatusThenPriority).map((task) => (
+            <TaskRow
+              key={task.id}
+              task={task}
+              onStatusChange={handleStatusChange}
+              onEdit={openEdit}
+              onDelete={handleDelete}
+            />
           ))}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {activeTasks.length > 0 ? (
+            <div className="bg-surface-card border border-gray-border rounded-xl divide-y divide-gray-border">
+              {activeTasks.map((task) => (
+                <TaskRow
+                  key={task.id}
+                  task={task}
+                  onStatusChange={handleStatusChange}
+                  onEdit={openEdit}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-400 text-sm">Nessun task attivo.</p>
+          )}
+
+          {completedTasks.length > 0 && (
+            <div className="bg-surface-card border border-gray-border rounded-xl overflow-hidden">
+              <button
+                onClick={() => setShowCompleted((v) => !v)}
+                className="w-full flex items-center justify-between gap-2 px-4 py-3 text-sm font-medium text-on-surface-variant hover:bg-surface-container-low transition-colors"
+                aria-expanded={showCompleted}
+              >
+                <span className="inline-flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[20px]">check_circle</span>
+                  Completati ({completedTasks.length})
+                </span>
+                <span className="material-symbols-outlined text-[20px]">
+                  {showCompleted ? 'expand_less' : 'expand_more'}
+                </span>
+              </button>
+              {showCompleted && (
+                <div className="divide-y divide-gray-border border-t border-gray-border">
+                  {completedTasks.map((task) => (
+                    <TaskRow
+                      key={task.id}
+                      task={task}
+                      onStatusChange={handleStatusChange}
+                      onEdit={openEdit}
+                      onDelete={handleDelete}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 
@@ -154,6 +179,61 @@ export default function TasksPage() {
           onCancel={() => { setFormOpen(false); setEditing(undefined) }}
         />
       )}
+    </div>
+  )
+}
+
+function TaskRow({
+  task,
+  onStatusChange,
+  onEdit,
+  onDelete,
+}: {
+  task: Task
+  onStatusChange: (task: Task, status: TaskStatus) => void
+  onEdit: (task: Task) => void
+  onDelete: (id: string) => void
+}) {
+  return (
+    <div className="flex items-start gap-4 p-4">
+      <div className="flex-1 min-w-0">
+        <p className="text-sm text-on-surface whitespace-pre-wrap">{task.description}</p>
+        <div className="flex items-center flex-wrap gap-3 mt-2">
+          {task.assignee && (
+            <span className="inline-flex items-center gap-1 text-xs text-on-surface-variant">
+              <span className="material-symbols-outlined text-[16px]">person</span>
+              {task.assignee}
+            </span>
+          )}
+          <PriorityStars value={task.priority} />
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 shrink-0">
+        <select
+          value={task.status}
+          onChange={(e) => onStatusChange(task, e.target.value as TaskStatus)}
+          className={`rounded-full text-xs font-semibold px-2.5 py-1 border-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/30 ${TASK_STATUS_COLORS[task.status]}`}
+        >
+          {(Object.keys(TASK_STATUS_LABELS) as TaskStatus[]).map((s) => (
+            <option key={s} value={s}>{TASK_STATUS_LABELS[s]}</option>
+          ))}
+        </select>
+        <button
+          onClick={() => onEdit(task)}
+          className="p-1 rounded-lg text-gray-400 hover:text-primary hover:bg-surface-container-low transition-colors"
+          aria-label="Modifica"
+        >
+          <span className="material-symbols-outlined text-[20px]">edit</span>
+        </button>
+        <button
+          onClick={() => onDelete(task.id)}
+          className="p-1 rounded-lg text-gray-400 hover:text-danger hover:bg-red-50 transition-colors"
+          aria-label="Elimina"
+        >
+          <span className="material-symbols-outlined text-[20px]">delete</span>
+        </button>
+      </div>
     </div>
   )
 }
